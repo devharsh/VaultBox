@@ -23,5 +23,13 @@ int main(int argc, const char * argv[]) {
     }
     */
     
+    vector<string> secureAlerts;
+    for(int i=0; i<1024; i++) {
+        std::string alertText = "This is string number ";
+        alertText += to_string(i);
+        secureAlerts.push_back(alertText);
+        cout << secureAlerts[i] << endl;
+    }
+    
     return 0;
 }
