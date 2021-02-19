@@ -9,17 +9,22 @@
 #include <string>
 #include <vector>
 #include <random>
-//#include <chrono>
 
 using namespace std;
 
-int writeVaultBox(string alert); //returns operation status
-int readVaultBox(); //returns number of valid messages
+#define redundancyFactor 4
+#define bufferSize 256
+#define maxAlerts (redundancyFactor * bufferSize)
+
+int writeVaultBox(string alert);
+void readVaultBox();
+void shuffleIndexes();
 
 vector<string> vaultBox;
+vector<int> indexes;
 
-mt19937 mtGen(101);
-uniform_int_distribution<int> uniDist(0, 1023);
+int totalAlertCount = 0;
+int indexCount = 0;
 
 int main(int argc, const char * argv[]) {
     
@@ -39,11 +44,20 @@ int main(int argc, const char * argv[]) {
     random_device ranDev;
     mt19937 mtGen(ranDev());
      
+    cout << vaultBox[rand()%1024] << endl;
+    cout << vaultBox[rand()%1024] << endl;
+    cout << vaultBox[rand()%1024] << endl;
+    vaultBox[100] = "100";
+    cout << vaultBox[100] << endl;
+     
     */
     
-    for(int i=0; i<1024; i++) {
+    for(int i=0; i<maxAlerts; i++) {
+        indexes.push_back(i);
         vaultBox.push_back("it is the default string");
     }
+    
+    shuffleIndexes();
     
     for(int i=0; i<100; i++) {
         std::string alertText = "This is string number ";
@@ -51,35 +65,31 @@ int main(int argc, const char * argv[]) {
         writeVaultBox(alertText);
     }
     
-    /*
-    cout << vaultBox[rand()%1024] << endl;
-    cout << vaultBox[rand()%1024] << endl;
-    cout << vaultBox[rand()%1024] << endl;
-    vaultBox[100] = "100";
-    cout << vaultBox[100] << endl;
-    */
-    
     readVaultBox();
     
     return 0;
 }
 
 int writeVaultBox(string alert) {
-    int i=0;
+    indexCount = indexCount % maxAlerts;
     
-    for (int i=0; i<4; i++) {
-        vaultBox[uniDist(mtGen)] = alert;
+    for (int i=0; i<redundancyFactor; i++) {
+        vaultBox[indexes[indexCount]] = alert;
+        indexCount++;
+        totalAlertCount++;
     }
     
-    return i;
+    return totalAlertCount;
 }
 
-int readVaultBox() {
-    int i=0;
-    
-    for(int i=0; i<1024; i++) {
+void readVaultBox() {
+    for(int i=0; i<maxAlerts; i++) {
         cout << vaultBox[i] << endl;
     }
-    
-    return i;
+}
+
+void shuffleIndexes() {
+    random_device ranDev;
+    mt19937 mtGen(ranDev());
+    shuffle(indexes.begin(), indexes.end(), mtGen);
 }
