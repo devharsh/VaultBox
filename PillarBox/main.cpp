@@ -1,6 +1,6 @@
 //
 //  main.cpp
-//  PillarBox
+//  VaultBox
 //
 //  Created by Devharsh Trivedi on 2/17/21.
 //
@@ -61,7 +61,6 @@ int main(int argc, const char * argv[]) {
         AutoSeededRandomPool prng;
         SecByteBlock key(50);
         prng.GenerateBlock(key, key.size());
-        // iota(indexes.begin(), indexes.end(), 0);
         
         for(unsigned long i=0; i<maxAlerts; i++) {
             indexes.push_back(i);
@@ -71,7 +70,7 @@ int main(int argc, const char * argv[]) {
         shuffleIndexes();
         for(int i=0; i<4; i++)
         writeVaultBox("This is a string", key);
-        //readVaultBox();
+        readVaultBox();
         
         return 0;
     }
@@ -100,28 +99,29 @@ void writeVaultBox(string alert, SecByteBlock& key) {
     indexCount = indexCount % maxAlerts;
     alert = to_string(totalAlertCount) + delimiter + alert;
     
-    string encoded;
-    encoded.clear();
-    StringSource ss1(key, key.size(), true,
-                     new HexEncoder(new StringSink(encoded)));
-    
-    //cout << "key: " << encoded << endl;
-    cout << "plain text: " << alert << endl;
-    
     HMAC< SHA256 > hmac(key, key.size());
-    StringSource ss(alert, true,
-                    new HashFilter(hmac, new StringSink(alert)));
     
-    SecByteBlock newkey(reinterpret_cast<const byte*>(&alert[0]), alert.size());
+    string alert_hmac;
+    StringSource ss(alert, true,
+                    new HashFilter(hmac, new StringSink(alert_hmac)));
+    
+    string alert_hmac_hex;
+    StringSource ss2(alert_hmac, true,
+                     new HexEncoder(new StringSink(alert_hmac_hex)));
+    
+    //NOTE: use "Encrypt then Authenticate (EtA)" and not "Encrypt and Authenticate (E&A)"
+    //'AES-EAX' - Demonstrates encryption and decryption using AES in EAX mode (confidentiality and authentication)
+    //'cryptopp-authenc' - Authenticated encryption and decryption using a block cipher in CBC mode and a HMAC
+    //Encrypt then Authenticate (EtA) - IPSec
+    //Encrypt and  Authenticate (E&A) - SSH
+    
+    alert = alert + delimiter + alert_hmac_hex;
+    
+    SecByteBlock newkey(reinterpret_cast<const byte*>(&alert_hmac[0]), alert_hmac.size());
     key = newkey;
     
-    encoded.clear();
-    StringSource ss2(alert, true,
-                     new HexEncoder(new StringSink(encoded)));
-    cout << "hmac: " << encoded << endl;
-    
     for (int i=0; i<redundancyFactor; i++) {
-        vaultBox[indexes[indexCount]] = encoded;
+        vaultBox[indexes[indexCount]] = alert;
         indexCount++;
     }
 }
