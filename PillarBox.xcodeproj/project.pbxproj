@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CA65813825E86AC00033F2C3 /* cryptopp-authenc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA65813625E86ABF0033F2C3 /* cryptopp-authenc.cpp */; };
 		CA8A6FCB25DDB04400827793 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA8A6FCA25DDB04400827793 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +24,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		CA65813625E86ABF0033F2C3 /* cryptopp-authenc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "cryptopp-authenc.cpp"; sourceTree = "<group>"; };
+		CA65813725E86ABF0033F2C3 /* coding.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = coding.txt; sourceTree = "<group>"; };
 		CA8A6FC725DDB04400827793 /* PillarBox */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = PillarBox; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA8A6FCA25DDB04400827793 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -57,6 +60,8 @@
 		CA8A6FC925DDB04400827793 /* PillarBox */ = {
 			isa = PBXGroup;
 			children = (
+				CA65813725E86ABF0033F2C3 /* coding.txt */,
+				CA65813625E86ABF0033F2C3 /* cryptopp-authenc.cpp */,
 				CA8A6FCA25DDB04400827793 /* main.cpp */,
 			);
 			path = PillarBox;
@@ -119,6 +124,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CA8A6FCB25DDB04400827793 /* main.cpp in Sources */,
+				CA65813825E86AC00033F2C3 /* cryptopp-authenc.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

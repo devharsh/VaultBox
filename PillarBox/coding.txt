@@ -1,0 +1,43 @@
+1.	Always compute the MACs on the ciphertext, never on the plaintext.
+2.	Use two different keys, one for encryption and one for the MAC.
+
+Rule(1)prevents chosen-ciphertext attacks on block cipher modes such as CBC, since your decryption process can reject those attacker-tampered ciphertexts before theyre even decrypted. Rule(2)deals with the possibility that your MAC and cipher will interact in some unpleasant way.It can also help protect you against side-channel attacks.
+
+This approach  encrypting something, then MACing it  isnot only secure, itsprovablysecureas long as your encryption scheme and MAC have certain properties. Properties that most common schemes do seem to possess. Specifically, your encryption scheme must be IND-CPA secure, which would apply to CBC, CTR, CFB and OFB modes implemented with a secure block cipher. Your MAC must be existentially unforgeable under chosen message attack (EU-CMA), a property thats (believed) to be satisfied by most reasonable instantiations of"http://en.wikipedia.org/wiki/HMAC" HMAC.
+
+"https://blog.cryptographyengineering.com/2012/05/19/how-to-choose-authenticated-encryption/" https://blog.cryptographyengineering.com/2012/05/19/how-to-choose-authenticated-encryption/
+
+
+Encryption schemes such as AES in CBC mode (non-deterministic) are believed to be semantically secure
+
+"https://www.slideserve.com/austin-foster/querying-encrypted-data" https://www.slideserve.com/austin-foster/querying-encrypted-data
+
+
+"https://crypto.stackexchange.com/questions/18420/aes-gcm-disadvantage" https://crypto.stackexchange.com/questions/18420/aes-gcm-disadvantage
+
+
+
+Password: Super secret password
+AES key: C08126FBECA7E2BE71B69FE92570A991
+AES IV: BCEB5407D68912C266B9045A5DD007CB
+HMAC key: EBBECB1D0A5B52F306B0F328877E057A
+Message: Now is the time for all good men to come to the aide of their country
+Ciphertext+MAC: 880EBA2190A039E94DA2CBBB0F46AA238879D9AE6BD8AFF5E141FF55B4B7D48A3A58B0910DADB9CEF2A7CC7C2954538ABFBF761F9602ED3C1BA8C6C645F96EF48FF9D3ACFA9ABB0C5A4906C00D2C17E9
+3CBA8B64D4493B45F7F95C64EB7F947B5C9516AA100E6C02427CF254556DE94C
+Recovered: Now is the time for all good men to come to the aide of their country
+
+
+Ciphertext+MAC: 880EBA2190A039E94DA2CBBB0F46AA238879D9AE6BD8AFF5E141FF55B4B7D48A3A58B0910DADB9CEF2A7CC7C2954538ABFBF761F9602ED3C1BA8C6C645F96EF48FF9D3ACFA9ABB0C5A4906C00D2C17E9
+FAEB3E023C23E98613A9D803A04029E81F6D3960EF6A4A101265791CABF00F75
+
+
+Ciphertext+MAC: 880EBA2190A039E94DA2CBBB0F46AA238879D9AE6BD8AFF5E141FF55B4B7D48A3A58B0910DADB9CEF2A7CC7C2954538ABFBF761F9602ED3C1BA8C6C645F96EF48FF9D3ACFA9ABB0C5A4906C00D2C17E9
+D055AB22BE5A33C7837F7ADEDEE53CDA0004786B3337A89C514A16064A1FD43B
+
+
+Ciphertext+MAC: 880EBA2190A039E94DA2CBBB0F46AA238879D9AE6BD8AFF5E141FF55B4B7D48A3A58B0910DADB9CEF2A7CC7C2954538ABFBF761F9602ED3C1BA8C6C645F96EF48FF9D3ACFA9ABB0C5A4906C00D2C17E9
+3A16290CFCDBACD8E78A59EA327E34C05428D0970DBD08AD1B384D63238F404A
+
+
+five combined modes for confidentiality and authentication (CCM, GCM, KW, KWP, and TKW)
+https://csrc.nist.gov/projects/block-cipher-techniques/bcm
