@@ -23,7 +23,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		CA8A6FC725DDB04400827793 /* PillarBox */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = PillarBox; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA8A6FC725DDB04400827793 /* VaultBox */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VaultBox; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA8A6FCA25DDB04400827793 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -41,7 +41,7 @@
 		CA8A6FBE25DDB04400827793 = {
 			isa = PBXGroup;
 			children = (
-				CA8A6FC925DDB04400827793 /* PillarBox */,
+				CA8A6FC925DDB04400827793 /* VaultBox */,
 				CA8A6FC825DDB04400827793 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -49,25 +49,25 @@
 		CA8A6FC825DDB04400827793 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CA8A6FC725DDB04400827793 /* PillarBox */,
+				CA8A6FC725DDB04400827793 /* VaultBox */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		CA8A6FC925DDB04400827793 /* PillarBox */ = {
+		CA8A6FC925DDB04400827793 /* VaultBox */ = {
 			isa = PBXGroup;
 			children = (
 				CA8A6FCA25DDB04400827793 /* main.cpp */,
 			);
-			path = PillarBox;
+			path = VaultBox;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		CA8A6FC625DDB04400827793 /* PillarBox */ = {
+		CA8A6FC625DDB04400827793 /* VaultBox */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CA8A6FCE25DDB04400827793 /* Build configuration list for PBXNativeTarget "PillarBox" */;
+			buildConfigurationList = CA8A6FCE25DDB04400827793 /* Build configuration list for PBXNativeTarget "VaultBox" */;
 			buildPhases = (
 				CA8A6FC325DDB04400827793 /* Sources */,
 				CA8A6FC425DDB04400827793 /* Frameworks */,
@@ -77,9 +77,9 @@
 			);
 			dependencies = (
 			);
-			name = PillarBox;
+			name = VaultBox;
 			productName = PillarBox;
-			productReference = CA8A6FC725DDB04400827793 /* PillarBox */;
+			productReference = CA8A6FC725DDB04400827793 /* VaultBox */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -95,7 +95,7 @@
 					};
 				};
 			};
-			buildConfigurationList = CA8A6FC225DDB04400827793 /* Build configuration list for PBXProject "PillarBox" */;
+			buildConfigurationList = CA8A6FC225DDB04400827793 /* Build configuration list for PBXProject "VaultBox" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -108,7 +108,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CA8A6FC625DDB04400827793 /* PillarBox */,
+				CA8A6FC625DDB04400827793 /* VaultBox */,
 			);
 		};
 /* End PBXProject section */
@@ -321,7 +321,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CA8A6FC225DDB04400827793 /* Build configuration list for PBXProject "PillarBox" */ = {
+		CA8A6FC225DDB04400827793 /* Build configuration list for PBXProject "VaultBox" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CA8A6FCC25DDB04400827793 /* Debug */,
@@ -330,7 +330,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CA8A6FCE25DDB04400827793 /* Build configuration list for PBXNativeTarget "PillarBox" */ = {
+		CA8A6FCE25DDB04400827793 /* Build configuration list for PBXNativeTarget "VaultBox" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CA8A6FCF25DDB04400827793 /* Debug */,
