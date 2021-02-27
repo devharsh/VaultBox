@@ -6,8 +6,13 @@
 	objectVersion = 50;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		CAD5F44025E9CC0E00422AEA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CAD5F43F25E9CC0E00422AEA /* main.cpp */; };
+		CAD5F44B25E9CC2600422AEA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CAD5F44A25E9CC2600422AEA /* main.cpp */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXCopyFilesBuildPhase section */
-		CAD5F3FE25E9C1BA00422AEA /* CopyFiles */ = {
+		CAD5F43B25E9CC0E00422AEA /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -16,7 +21,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
-		CAD5F40D25E9C22500422AEA /* CopyFiles */ = {
+		CAD5F44625E9CC2600422AEA /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -28,19 +33,21 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		CAD5F43525E9CB8600422AEA /* VaultBox_SIEM */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = VaultBox_SIEM; path = /Users/devharsh/Desktop/PillarBox/build/Debug/VaultBox_SIEM; sourceTree = "<absolute>"; };
-		CAD5F43625E9CB8600422AEA /* VaultBox_SAS */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = VaultBox_SAS; path = /Users/devharsh/Desktop/PillarBox/build/Debug/VaultBox_SAS; sourceTree = "<absolute>"; };
+		CAD5F43D25E9CC0E00422AEA /* VaultBox_SAS */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VaultBox_SAS; sourceTree = BUILT_PRODUCTS_DIR; };
+		CAD5F43F25E9CC0E00422AEA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		CAD5F44825E9CC2600422AEA /* VaultBox_SIEM */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VaultBox_SIEM; sourceTree = BUILT_PRODUCTS_DIR; };
+		CAD5F44A25E9CC2600422AEA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		CAD5F3FD25E9C1BA00422AEA /* Frameworks */ = {
+		CAD5F43A25E9CC0E00422AEA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CAD5F40C25E9C22500422AEA /* Frameworks */ = {
+		CAD5F44525E9CC2600422AEA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -53,36 +60,39 @@
 		CA8A6FBE25DDB04400827793 = {
 			isa = PBXGroup;
 			children = (
+				CAD5F43D25E9CC0E00422AEA /* VaultBox_SAS */,
+				CAD5F43E25E9CC0E00422AEA /* VaultBox_SAS */,
+				CAD5F44825E9CC2600422AEA /* VaultBox_SIEM */,
+				CAD5F44925E9CC2600422AEA /* VaultBox_SIEM */,
 			);
+			sourceTree = "<group>";
+		};
+		CAD5F43E25E9CC0E00422AEA /* VaultBox_SAS */ = {
+			isa = PBXGroup;
+			children = (
+				CAD5F43F25E9CC0E00422AEA /* main.cpp */,
+			);
+			path = VaultBox_SAS;
+			sourceTree = "<group>";
+		};
+		CAD5F44925E9CC2600422AEA /* VaultBox_SIEM */ = {
+			isa = PBXGroup;
+			children = (
+				CAD5F44A25E9CC2600422AEA /* main.cpp */,
+			);
+			path = VaultBox_SIEM;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		CAD5F3FF25E9C1BA00422AEA /* VaultBox_SIEM */ = {
+		CAD5F43C25E9CC0E00422AEA /* VaultBox_SAS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CAD5F40425E9C1BA00422AEA /* Build configuration list for PBXNativeTarget "VaultBox_SIEM" */;
+			buildConfigurationList = CAD5F44125E9CC0E00422AEA /* Build configuration list for PBXNativeTarget "VaultBox_SAS" */;
 			buildPhases = (
-				CAD5F3FC25E9C1BA00422AEA /* Sources */,
-				CAD5F3FD25E9C1BA00422AEA /* Frameworks */,
-				CAD5F3FE25E9C1BA00422AEA /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = VaultBox_SIEM;
-			productName = VaultBox_SIEM;
-			productReference = CAD5F43525E9CB8600422AEA /* VaultBox_SIEM */;
-			productType = "com.apple.product-type.tool";
-		};
-		CAD5F40E25E9C22500422AEA /* VaultBox_SAS */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = CAD5F41325E9C22500422AEA /* Build configuration list for PBXNativeTarget "VaultBox_SAS" */;
-			buildPhases = (
-				CAD5F40B25E9C22500422AEA /* Sources */,
-				CAD5F40C25E9C22500422AEA /* Frameworks */,
-				CAD5F40D25E9C22500422AEA /* CopyFiles */,
+				CAD5F43925E9CC0E00422AEA /* Sources */,
+				CAD5F43A25E9CC0E00422AEA /* Frameworks */,
+				CAD5F43B25E9CC0E00422AEA /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -90,7 +100,24 @@
 			);
 			name = VaultBox_SAS;
 			productName = VaultBox_SAS;
-			productReference = CAD5F43625E9CB8600422AEA /* VaultBox_SAS */;
+			productReference = CAD5F43D25E9CC0E00422AEA /* VaultBox_SAS */;
+			productType = "com.apple.product-type.tool";
+		};
+		CAD5F44725E9CC2600422AEA /* VaultBox_SIEM */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CAD5F44C25E9CC2600422AEA /* Build configuration list for PBXNativeTarget "VaultBox_SIEM" */;
+			buildPhases = (
+				CAD5F44425E9CC2600422AEA /* Sources */,
+				CAD5F44525E9CC2600422AEA /* Frameworks */,
+				CAD5F44625E9CC2600422AEA /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VaultBox_SIEM;
+			productName = VaultBox_SIEM;
+			productReference = CAD5F44825E9CC2600422AEA /* VaultBox_SIEM */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -101,10 +128,10 @@
 			attributes = {
 				LastUpgradeCheck = 1240;
 				TargetAttributes = {
-					CAD5F3FF25E9C1BA00422AEA = {
+					CAD5F43C25E9CC0E00422AEA = {
 						CreatedOnToolsVersion = 12.4;
 					};
-					CAD5F40E25E9C22500422AEA = {
+					CAD5F44725E9CC2600422AEA = {
 						CreatedOnToolsVersion = 12.4;
 					};
 				};
@@ -122,24 +149,26 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CAD5F3FF25E9C1BA00422AEA /* VaultBox_SIEM */,
-				CAD5F40E25E9C22500422AEA /* VaultBox_SAS */,
+				CAD5F43C25E9CC0E00422AEA /* VaultBox_SAS */,
+				CAD5F44725E9CC2600422AEA /* VaultBox_SIEM */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		CAD5F3FC25E9C1BA00422AEA /* Sources */ = {
+		CAD5F43925E9CC0E00422AEA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CAD5F44025E9CC0E00422AEA /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CAD5F40B25E9C22500422AEA /* Sources */ = {
+		CAD5F44425E9CC2600422AEA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CAD5F44B25E9CC2600422AEA /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,7 +293,7 @@
 			};
 			name = Release;
 		};
-		CAD5F40525E9C1BA00422AEA /* Debug */ = {
+		CAD5F44225E9CC0E00422AEA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -273,7 +302,7 @@
 			};
 			name = Debug;
 		};
-		CAD5F40625E9C1BA00422AEA /* Release */ = {
+		CAD5F44325E9CC0E00422AEA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -282,7 +311,7 @@
 			};
 			name = Release;
 		};
-		CAD5F41425E9C22500422AEA /* Debug */ = {
+		CAD5F44D25E9CC2600422AEA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -291,7 +320,7 @@
 			};
 			name = Debug;
 		};
-		CAD5F41525E9C22500422AEA /* Release */ = {
+		CAD5F44E25E9CC2600422AEA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -312,20 +341,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CAD5F40425E9C1BA00422AEA /* Build configuration list for PBXNativeTarget "VaultBox_SIEM" */ = {
+		CAD5F44125E9CC0E00422AEA /* Build configuration list for PBXNativeTarget "VaultBox_SAS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CAD5F40525E9C1BA00422AEA /* Debug */,
-				CAD5F40625E9C1BA00422AEA /* Release */,
+				CAD5F44225E9CC0E00422AEA /* Debug */,
+				CAD5F44325E9CC0E00422AEA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CAD5F41325E9C22500422AEA /* Build configuration list for PBXNativeTarget "VaultBox_SAS" */ = {
+		CAD5F44C25E9CC2600422AEA /* Build configuration list for PBXNativeTarget "VaultBox_SIEM" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CAD5F41425E9C22500422AEA /* Debug */,
-				CAD5F41525E9C22500422AEA /* Release */,
+				CAD5F44D25E9CC2600422AEA /* Debug */,
+				CAD5F44E25E9CC2600422AEA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
