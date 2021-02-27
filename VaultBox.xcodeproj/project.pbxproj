@@ -6,12 +6,6 @@
 	objectVersion = 50;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		CAD5F41925E9C25500422AEA /* SAS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CAD5F3F625E9BC6900422AEA /* SAS.cpp */; };
-		CAD5F41D25E9C26000422AEA /* SIEM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CAD5F3F525E9BC6800422AEA /* SIEM.cpp */; };
-		CAD5F42125E9C27000422AEA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA8A6FCA25DDB04400827793 /* main.cpp */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		CAD5F3FE25E9C1BA00422AEA /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -34,13 +28,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		CA8A6FCA25DDB04400827793 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../VaultBox_SAS/main.cpp; sourceTree = "<group>"; };
-		CAD5F3F525E9BC6800422AEA /* SIEM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SIEM.cpp; sourceTree = "<group>"; };
-		CAD5F3F625E9BC6900422AEA /* SAS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SAS.cpp; sourceTree = "<group>"; };
-		CAD5F3F725E9BC6900422AEA /* SIEM.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SIEM.hpp; sourceTree = "<group>"; };
-		CAD5F3F825E9BC6900422AEA /* SAS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SAS.hpp; sourceTree = "<group>"; };
-		CAD5F40025E9C1BA00422AEA /* VaultBox_SIEM */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VaultBox_SIEM; sourceTree = BUILT_PRODUCTS_DIR; };
-		CAD5F40F25E9C22500422AEA /* VaultBox_SAS */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VaultBox_SAS; sourceTree = BUILT_PRODUCTS_DIR; };
+		CAD5F43525E9CB8600422AEA /* VaultBox_SIEM */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = VaultBox_SIEM; path = /Users/devharsh/Desktop/PillarBox/build/Debug/VaultBox_SIEM; sourceTree = "<absolute>"; };
+		CAD5F43625E9CB8600422AEA /* VaultBox_SAS */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = VaultBox_SAS; path = /Users/devharsh/Desktop/PillarBox/build/Debug/VaultBox_SAS; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,38 +53,7 @@
 		CA8A6FBE25DDB04400827793 = {
 			isa = PBXGroup;
 			children = (
-				CAD5F40125E9C1BA00422AEA /* VaultBox_SIEM */,
-				CAD5F41025E9C22500422AEA /* VaultBox_SAS */,
-				CA8A6FC825DDB04400827793 /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		CA8A6FC825DDB04400827793 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				CAD5F40025E9C1BA00422AEA /* VaultBox_SIEM */,
-				CAD5F40F25E9C22500422AEA /* VaultBox_SAS */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		CAD5F40125E9C1BA00422AEA /* VaultBox_SIEM */ = {
-			isa = PBXGroup;
-			children = (
-				CAD5F3F525E9BC6800422AEA /* SIEM.cpp */,
-				CAD5F3F725E9BC6900422AEA /* SIEM.hpp */,
-				CA8A6FCA25DDB04400827793 /* main.cpp */,
-			);
-			path = VaultBox_SIEM;
-			sourceTree = "<group>";
-		};
-		CAD5F41025E9C22500422AEA /* VaultBox_SAS */ = {
-			isa = PBXGroup;
-			children = (
-				CAD5F3F625E9BC6900422AEA /* SAS.cpp */,
-				CAD5F3F825E9BC6900422AEA /* SAS.hpp */,
-			);
-			path = VaultBox_SAS;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -115,7 +73,7 @@
 			);
 			name = VaultBox_SIEM;
 			productName = VaultBox_SIEM;
-			productReference = CAD5F40025E9C1BA00422AEA /* VaultBox_SIEM */;
+			productReference = CAD5F43525E9CB8600422AEA /* VaultBox_SIEM */;
 			productType = "com.apple.product-type.tool";
 		};
 		CAD5F40E25E9C22500422AEA /* VaultBox_SAS */ = {
@@ -132,7 +90,7 @@
 			);
 			name = VaultBox_SAS;
 			productName = VaultBox_SAS;
-			productReference = CAD5F40F25E9C22500422AEA /* VaultBox_SAS */;
+			productReference = CAD5F43625E9CB8600422AEA /* VaultBox_SAS */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -160,7 +118,7 @@
 				Base,
 			);
 			mainGroup = CA8A6FBE25DDB04400827793;
-			productRefGroup = CA8A6FC825DDB04400827793 /* Products */;
+			productRefGroup = CA8A6FBE25DDB04400827793;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -175,8 +133,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CAD5F41D25E9C26000422AEA /* SIEM.cpp in Sources */,
-				CAD5F42125E9C27000422AEA /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,7 +140,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CAD5F41925E9C25500422AEA /* SAS.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
