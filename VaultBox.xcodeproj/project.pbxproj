@@ -7,11 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CA8A6FCB25DDB04400827793 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA8A6FCA25DDB04400827793 /* main.cpp */; };
+		CAD5F41925E9C25500422AEA /* SAS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CAD5F3F625E9BC6900422AEA /* SAS.cpp */; };
+		CAD5F41D25E9C26000422AEA /* SIEM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CAD5F3F525E9BC6800422AEA /* SIEM.cpp */; };
+		CAD5F42125E9C27000422AEA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA8A6FCA25DDB04400827793 /* main.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		CA8A6FC525DDB04400827793 /* CopyFiles */ = {
+		CAD5F3FE25E9C1BA00422AEA /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		CAD5F40D25E9C22500422AEA /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -23,12 +34,24 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		CA8A6FC725DDB04400827793 /* VaultBox */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VaultBox; sourceTree = BUILT_PRODUCTS_DIR; };
-		CA8A6FCA25DDB04400827793 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		CA8A6FCA25DDB04400827793 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../VaultBox_SAS/main.cpp; sourceTree = "<group>"; };
+		CAD5F3F525E9BC6800422AEA /* SIEM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SIEM.cpp; sourceTree = "<group>"; };
+		CAD5F3F625E9BC6900422AEA /* SAS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SAS.cpp; sourceTree = "<group>"; };
+		CAD5F3F725E9BC6900422AEA /* SIEM.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SIEM.hpp; sourceTree = "<group>"; };
+		CAD5F3F825E9BC6900422AEA /* SAS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SAS.hpp; sourceTree = "<group>"; };
+		CAD5F40025E9C1BA00422AEA /* VaultBox_SIEM */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VaultBox_SIEM; sourceTree = BUILT_PRODUCTS_DIR; };
+		CAD5F40F25E9C22500422AEA /* VaultBox_SAS */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VaultBox_SAS; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		CA8A6FC425DDB04400827793 /* Frameworks */ = {
+		CAD5F3FD25E9C1BA00422AEA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CAD5F40C25E9C22500422AEA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -41,7 +64,8 @@
 		CA8A6FBE25DDB04400827793 = {
 			isa = PBXGroup;
 			children = (
-				CA8A6FC925DDB04400827793 /* VaultBox */,
+				CAD5F40125E9C1BA00422AEA /* VaultBox_SIEM */,
+				CAD5F41025E9C22500422AEA /* VaultBox_SAS */,
 				CA8A6FC825DDB04400827793 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -49,37 +73,66 @@
 		CA8A6FC825DDB04400827793 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CA8A6FC725DDB04400827793 /* VaultBox */,
+				CAD5F40025E9C1BA00422AEA /* VaultBox_SIEM */,
+				CAD5F40F25E9C22500422AEA /* VaultBox_SAS */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		CA8A6FC925DDB04400827793 /* VaultBox */ = {
+		CAD5F40125E9C1BA00422AEA /* VaultBox_SIEM */ = {
 			isa = PBXGroup;
 			children = (
+				CAD5F3F525E9BC6800422AEA /* SIEM.cpp */,
+				CAD5F3F725E9BC6900422AEA /* SIEM.hpp */,
 				CA8A6FCA25DDB04400827793 /* main.cpp */,
 			);
-			path = VaultBox;
+			path = VaultBox_SIEM;
+			sourceTree = "<group>";
+		};
+		CAD5F41025E9C22500422AEA /* VaultBox_SAS */ = {
+			isa = PBXGroup;
+			children = (
+				CAD5F3F625E9BC6900422AEA /* SAS.cpp */,
+				CAD5F3F825E9BC6900422AEA /* SAS.hpp */,
+			);
+			path = VaultBox_SAS;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		CA8A6FC625DDB04400827793 /* VaultBox */ = {
+		CAD5F3FF25E9C1BA00422AEA /* VaultBox_SIEM */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CA8A6FCE25DDB04400827793 /* Build configuration list for PBXNativeTarget "VaultBox" */;
+			buildConfigurationList = CAD5F40425E9C1BA00422AEA /* Build configuration list for PBXNativeTarget "VaultBox_SIEM" */;
 			buildPhases = (
-				CA8A6FC325DDB04400827793 /* Sources */,
-				CA8A6FC425DDB04400827793 /* Frameworks */,
-				CA8A6FC525DDB04400827793 /* CopyFiles */,
+				CAD5F3FC25E9C1BA00422AEA /* Sources */,
+				CAD5F3FD25E9C1BA00422AEA /* Frameworks */,
+				CAD5F3FE25E9C1BA00422AEA /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = VaultBox;
-			productName = PillarBox;
-			productReference = CA8A6FC725DDB04400827793 /* VaultBox */;
+			name = VaultBox_SIEM;
+			productName = VaultBox_SIEM;
+			productReference = CAD5F40025E9C1BA00422AEA /* VaultBox_SIEM */;
+			productType = "com.apple.product-type.tool";
+		};
+		CAD5F40E25E9C22500422AEA /* VaultBox_SAS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CAD5F41325E9C22500422AEA /* Build configuration list for PBXNativeTarget "VaultBox_SAS" */;
+			buildPhases = (
+				CAD5F40B25E9C22500422AEA /* Sources */,
+				CAD5F40C25E9C22500422AEA /* Frameworks */,
+				CAD5F40D25E9C22500422AEA /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VaultBox_SAS;
+			productName = VaultBox_SAS;
+			productReference = CAD5F40F25E9C22500422AEA /* VaultBox_SAS */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -90,7 +143,10 @@
 			attributes = {
 				LastUpgradeCheck = 1240;
 				TargetAttributes = {
-					CA8A6FC625DDB04400827793 = {
+					CAD5F3FF25E9C1BA00422AEA = {
+						CreatedOnToolsVersion = 12.4;
+					};
+					CAD5F40E25E9C22500422AEA = {
 						CreatedOnToolsVersion = 12.4;
 					};
 				};
@@ -108,17 +164,27 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CA8A6FC625DDB04400827793 /* VaultBox */,
+				CAD5F3FF25E9C1BA00422AEA /* VaultBox_SIEM */,
+				CAD5F40E25E9C22500422AEA /* VaultBox_SAS */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		CA8A6FC325DDB04400827793 /* Sources */ = {
+		CAD5F3FC25E9C1BA00422AEA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CA8A6FCB25DDB04400827793 /* main.cpp in Sources */,
+				CAD5F41D25E9C26000422AEA /* SIEM.cpp in Sources */,
+				CAD5F42125E9C27000422AEA /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CAD5F40B25E9C22500422AEA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CAD5F41925E9C25500422AEA /* SAS.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,77 +309,38 @@
 			};
 			name = Release;
 		};
-		CA8A6FCF25DDB04400827793 /* Debug */ = {
+		CAD5F40525E9C1BA00422AEA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_WARN_ASSIGN_ENUM = YES;
-				CLANG_WARN_ATOMIC_IMPLICIT_SEQ_CST = YES;
-				CLANG_WARN_CXX0X_EXTENSIONS = YES;
-				CLANG_WARN_FLOAT_CONVERSION = YES;
-				CLANG_WARN_FRAMEWORK_INCLUDE_PRIVATE_FROM_PUBLIC = YES;
-				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
-				CLANG_WARN_SEMICOLON_BEFORE_METHOD_BODY = YES;
-				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES;
-				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_STYLE = Automatic;
-				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
-				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
-				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
-				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
-				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
-				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
-				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				GCC_WARN_SHADOW = YES;
-				GCC_WARN_SIGN_COMPARE = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNKNOWN_PRAGMAS = YES;
-				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_PARAMETER = YES;
-				HEADER_SEARCH_PATHS = /usr/local/include/;
-				LIBRARY_SEARCH_PATHS = /usr/local/lib/;
-				OTHER_LDFLAGS = "-lcryptopp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
 		};
-		CA8A6FD025DDB04400827793 /* Release */ = {
+		CAD5F40625E9C1BA00422AEA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_WARN_ASSIGN_ENUM = YES;
-				CLANG_WARN_ATOMIC_IMPLICIT_SEQ_CST = YES;
-				CLANG_WARN_CXX0X_EXTENSIONS = YES;
-				CLANG_WARN_FLOAT_CONVERSION = YES;
-				CLANG_WARN_FRAMEWORK_INCLUDE_PRIVATE_FROM_PUBLIC = YES;
-				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
-				CLANG_WARN_SEMICOLON_BEFORE_METHOD_BODY = YES;
-				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES;
-				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_STYLE = Automatic;
-				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
-				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
-				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
-				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
-				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
-				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
-				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				GCC_WARN_SHADOW = YES;
-				GCC_WARN_SIGN_COMPARE = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNKNOWN_PRAGMAS = YES;
-				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_PARAMETER = YES;
-				HEADER_SEARCH_PATHS = /usr/local/include/;
-				LIBRARY_SEARCH_PATHS = /usr/local/lib/;
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "-lcryptopp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		CAD5F41425E9C22500422AEA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		CAD5F41525E9C22500422AEA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_STYLE = Automatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -330,11 +357,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CA8A6FCE25DDB04400827793 /* Build configuration list for PBXNativeTarget "VaultBox" */ = {
+		CAD5F40425E9C1BA00422AEA /* Build configuration list for PBXNativeTarget "VaultBox_SIEM" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CA8A6FCF25DDB04400827793 /* Debug */,
-				CA8A6FD025DDB04400827793 /* Release */,
+				CAD5F40525E9C1BA00422AEA /* Debug */,
+				CAD5F40625E9C1BA00422AEA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CAD5F41325E9C22500422AEA /* Build configuration list for PBXNativeTarget "VaultBox_SAS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CAD5F41425E9C22500422AEA /* Debug */,
+				CAD5F41525E9C22500422AEA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
