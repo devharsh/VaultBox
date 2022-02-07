@@ -8,7 +8,6 @@
 #ifndef test_hpp
 #define test_hpp
 
-#include <stdio.h>
-#include <iostream>
+#include "lib.hpp"
 
 #endif /* test_hpp */
