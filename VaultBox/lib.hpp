@@ -39,6 +39,7 @@
 #define TAG_SIZE 16
 #define symSize (redundancyFactor * maxAlerts)
 #define seedVal 10
+#define logEnable false
 
 unsigned int shuffleIndexes(std::vector<unsigned long>& indexes);
 
@@ -80,5 +81,7 @@ void decryptChaChaPoly(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, 
 
 void decryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, unsigned long idxCnt,
                          std::vector<std::string>& vaultBox, std::vector<unsigned long>& indexes);
+
+void forwardKeygen(std::string msg, CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& akey);
 
 #endif /* lib_hpp */

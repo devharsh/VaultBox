@@ -51,18 +51,7 @@ int main() {
                 vaultBox[indexes[indexCount]] = encryptAlert(ekey, iv, akey, alert);
                 
                 std::string msg = vaultBox[indexes[indexCount]];
-                std::string digest;
-                CryptoPP::SHA256 hash;
-                hash.Update((const CryptoPP::byte*)msg.data(), msg.size());
-                
-                digest.resize(hash.DigestSize());
-                hash.Final((CryptoPP::byte*)&digest[0]);
-                std::string half = digest.substr(0, digest.length()/2);
-                std::string otherHalf = digest.substr(digest.length()/2);
-                CryptoPP::SecByteBlock new_key(reinterpret_cast<const CryptoPP::byte*>(&half[0]), half.size());
-                CryptoPP::SecByteBlock new_key2(reinterpret_cast<const CryptoPP::byte*>(&otherHalf[0]), otherHalf.size());
-                ekey = CryptoPP::SecByteBlock(new_key, 16);
-                akey = CryptoPP::SecByteBlock(new_key2,16);
+                forwardKeygen(msg, ekey, akey);
                 
                 CryptoPP::HexEncoder verify_encoder(new CryptoPP::FileSink(std::cout));
                 std::string verify_digest;
@@ -75,9 +64,11 @@ int main() {
                 verify_digest.resize(verify_hash.DigestSize());
                 verify_hash.Final((CryptoPP::byte*)&verify_digest[0]);
                 
-                std::cout << "Digest: ";
-                CryptoPP::StringSource(verify_digest, true, new CryptoPP::Redirector(verify_encoder));
-                std::cout << std::endl;
+                if(logEnable) {
+                    std::cout << "Digest: ";
+                    CryptoPP::StringSource(verify_digest, true, new CryptoPP::Redirector(verify_encoder));
+                    std::cout << std::endl;
+                }
                 
                 indexCount++;
             }
@@ -90,11 +81,11 @@ int main() {
         // RECEIVER
         
         // randomly drop symbols to simulate noisy channel
-        std::cout << vaultBox.size() << "\n";
+        if(logEnable) { std::cout << "VaultBox size is " << vaultBox.size() << "\n"; }
         for(int f=0; f<(maxAlerts/12); f++) {
             vaultBox.erase(vaultBox.begin() + (std::rand()%vaultBox.size()));
         }
-        std::cout << vaultBox.size() << "\n";
+        if(logEnable) { std::cout << "VaultBox size is " << vaultBox.size() << "\n"; }
         
         iota(indices.begin(), indices.end(), 0);
         iota(indexes.begin(), indexes.end(), 0);
