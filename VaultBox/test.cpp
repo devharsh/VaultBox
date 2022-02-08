@@ -89,6 +89,13 @@ int main() {
         
         // RECEIVER
         
+        // randomly drop symbols to simulate noisy channel
+        std::cout << vaultBox.size() << "\n";
+        for(int f=0; f<(maxAlerts/12); f++) {
+            vaultBox.erase(vaultBox.begin() + (std::rand()%vaultBox.size()));
+        }
+        std::cout << vaultBox.size() << "\n";
+        
         iota(indices.begin(), indices.end(), 0);
         iota(indexes.begin(), indexes.end(), 0);
         readVaultBox(key_c, key_c, key_c, vaultBox, indices, symStore);
