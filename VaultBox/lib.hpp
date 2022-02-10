@@ -31,15 +31,15 @@
 #include <vector>
 #include <random>
 
-#define redundancyFactor 3
-#define degreeVal 4
-#define bufferSize 5
+#define redundancyFactor 2
+#define degreeVal 3
+#define bufferSize 4
 #define maxAlerts (redundancyFactor * bufferSize)
 #define delimiter '?'
 #define TAG_SIZE 16
 #define symSize (redundancyFactor * maxAlerts)
 #define seedVal 10
-#define logEnable false
+#define logEnable true
 
 struct vbSymbol {
     std::vector<int> indices;

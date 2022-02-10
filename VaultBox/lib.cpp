@@ -156,12 +156,12 @@ std::string encryptChaChaPoly(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBloc
     key = CryptoPP::SecByteBlock(new_key, 16);
     
     if(logEnable) {
-        std::cout << "Plain: " << alert << std::endl;
-        std::cout << "Encode: " << encode << std::endl;
-        std::cout << "Cipher: " << cipher << std::endl;
-        std::cout << "MAC: " << strMac << std::endl;
-        std::cout << "Decode: " << decode << std::endl;
-        std::cout << "Recover: " << recover << std::endl << std::endl;
+        std::cout << "Plain: " << alert << "\n";
+        std::cout << "Encode: " << encode << "\n";
+        std::cout << "Cipher: " << cipher << "\n";
+        std::cout << "MAC: " << strMac << "\n";
+        std::cout << "Decode: " << decode << "\n";
+        std::cout << "Recover: " << recover << "\n" << "\n";
     }
     
     return cipher + strMac;
@@ -186,8 +186,8 @@ std::string encryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBl
     key = CryptoPP::SecByteBlock(new_key, 16);
     
     if(logEnable) {
-        std::cout << "plain text: " << alert << std::endl;
-        std::cout << "cipher text: " << std::endl << " " << encoded << std::endl;
+        std::cout << "plain text: " << alert << "\n";
+        std::cout << "cipher text: " << "\n" << " " << encoded << "\n";
     }
     
     return cipher;
@@ -292,10 +292,10 @@ void decryptVaultBox(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv, Cry
             CryptoPP::HexEncoder encoder(new CryptoPP::FileSink(std::cout));
             encoder.Put((CryptoPP::byte*)vaultBox[indexes[i]].data(), vaultBox[indexes[i]].size());
             encoder.MessageEnd();
-            std::cout << std::endl;
+            std::cout << "\n";
             
-            std::cout << "Recovered: " << recover << std::endl;
-            std::cout << std::endl;
+            std::cout << "Recovered: " << recover << "\n";
+            std::cout << "\n";
         }
         
         if(i == 0) { prevAlert.assign(recover); }
@@ -313,17 +313,17 @@ void PrintKeyAndIV(CryptoPP::SecByteBlock& ekey,
     std::cout << "ekey: ";
     encoder.Put(ekey.data(), ekey.size());
     encoder.MessageEnd();
-    std::cout << std::endl;
+    std::cout << "\n";
     
     std::cout << "iv: ";
     encoder.Put(iv.data(), iv.size());
     encoder.MessageEnd();
-    std::cout << std::endl;
+    std::cout << "\n";
     
     std::cout << "akey: ";
     encoder.Put(akey.data(), akey.size());
     encoder.MessageEnd();
-    std::cout << std::endl;
+    std::cout << "\n";
 }
 
 void sequenceChecker(std::string recover, std::string& prevAlert, unsigned long& prevSeq) {
@@ -332,14 +332,14 @@ void sequenceChecker(std::string recover, std::string& prevAlert, unsigned long&
     
     if(nextSeq - prevSeq == 1) {}
     else if(nextSeq - prevSeq == 0) { identityChecker(recover, prevAlert); }
-    else { std::cout << "missing sequence" << std::endl; }
+    else { std::cout << "missing sequence" << "\n"; }
     
     prevSeq = nextSeq;
     prevAlert.assign(recover);
 }
 
 void identityChecker(std::string nextAlert, std::string prevAlert) {
-    if(prevAlert.compare(nextAlert) != 0) { std::cout << "Error: Alert mismatch!!" << std::endl; }
+    if(prevAlert.compare(nextAlert) != 0) { std::cout << "Error: Alert mismatch!!" << "\n"; }
 }
 
 void decryptChaChaPoly(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, unsigned long idxCnt,
@@ -362,9 +362,9 @@ void decryptChaChaPoly(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, 
         key = CryptoPP::SecByteBlock(new_key, 16);
         
         if(logEnable) {
-            std::cout << cipher << std::endl;
-            std::cout << strMAC << std::endl;
-            std::cout << recover << std::endl;
+            std::cout << cipher << "\n";
+            std::cout << strMAC << "\n";
+            std::cout << recover << "\n";
         }
     }
 }
@@ -399,7 +399,7 @@ void decryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv
         retrieved.resize(n);
         
         if(n > 0) { df.Get((CryptoPP::byte*)retrieved.data(), n); }
-        if(logEnable) { std::cout << "recovered text: " << std::endl << " " << retrieved << std::endl; }
+        if(logEnable) { std::cout << "recovered text: " << "\n" << " " << retrieved << "\n"; }
         vaultBox[indexes[i]] = retrieved;
         
         CryptoPP::SecByteBlock new_key(reinterpret_cast<const CryptoPP::byte*>(cipher.data()), cipher.size());

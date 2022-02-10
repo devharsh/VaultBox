@@ -52,6 +52,7 @@ int main() {
             std::string alert = std::to_string(totalAlertCount) + delimiter + "It is a string!";
             for (unsigned long j=0; j<redundancyFactor; j++) {
                 indexCount = indexCount % maxAlerts;
+                
                 vaultBox[indexes[indexCount]] = encryptAlert(ekeyVec[indexCount], iv, akeyVec[indexCount], alert);
                 
                 // subroutine to check vaultBox[] hash periodically
@@ -69,11 +70,18 @@ int main() {
                 if(logEnable) {
                     std::cout << "Digest: ";
                     CryptoPP::StringSource(verify_digest, true, new CryptoPP::Redirector(verify_encoder));
-                    std::cout << std::endl;
+                    std::cout << "\n";
                 }
                 
                 indexCount++;
             }
+        }
+        
+        // randomly change messages to simulate malicious modifications
+        for(int c = 0; c < 0/*maxAlerts/8*/; c++) {
+            int modId = std::rand()%maxAlerts;
+            vaultBox[modId] = "it is the default string.. for now";
+            if(logEnable) { std::cout << modId << "\n"; }
         }
         
         if(logEnable) {
@@ -89,15 +97,15 @@ int main() {
         // RECEIVER
         
         // randomly drop symbols to simulate noisy channel
-        if(logEnable) {
-            std::cout << "Total symbols are " << symStore.size() << "\n";
-            for(int f = 0; f < (symSize/1.75); f++) {
-                int delId = std::rand()%symStore.size();
-                symStore.erase(symStore.begin() + delId);
-                std::cout << delId << "\n";
-            }
-            std::cout << "Total symbols are " << symStore.size() << "\n";
+        if(logEnable) { std::cout << "Total symbols are " << symStore.size() << "\n"; }
+        
+        for(int f = 0; f < 0/*(symSize/1.75)*/; f++) {
+            int delId = std::rand()%symStore.size();
+            symStore.erase(symStore.begin() + delId);
+            if(logEnable) { std::cout << delId << "\n"; }
         }
+        
+        if(logEnable) { std::cout << "Total symbols are " << symStore.size() << "\n"; }
         
         iota(indexes.begin(), indexes.end(), 0);
         readVaultBox(key_c, key_c, key_c, vaultBox, symStore);
@@ -119,35 +127,35 @@ int main() {
     }
     
     catch(CryptoPP::BufferedTransformation::NoChannelSupport& e) {
-        std::cerr << "Caught NoChannelSupport..." << std::endl;
-        std::cerr << e.what() << std::endl;
+        std::cerr << "Caught NoChannelSupport..." << "\n";
+        std::cerr << e.what() << "\n";
         exit(1);
     }
     
     catch(CryptoPP::AuthenticatedSymmetricCipher::BadState& e) {
-        std::cerr << "Caught BadState..." << std::endl;
-        std::cerr << e.what() << std::endl;
+        std::cerr << "Caught BadState..." << "\n";
+        std::cerr << e.what() << "\n";
         exit(1);
     }
     
     catch(CryptoPP::InvalidArgument& e) {
-        std::cerr << "Caught InvalidArgument..." << std::endl;
-        std::cerr << e.what() << std::endl;
+        std::cerr << "Caught InvalidArgument..." << "\n";
+        std::cerr << e.what() << "\n";
         exit(1);
     }
     
     catch(const CryptoPP::Exception& e) {
-        std::cerr << e.what() << std::endl;
+        std::cerr << e.what() << "\n";
         exit(1);
     }
     
     catch(std::bad_alloc& ba){
-        std::cerr << "bad_alloc caught: " << ba.what() << std::endl;
+        std::cerr << "bad_alloc caught: " << ba.what() << "\n";
         exit(1);
     }
     
     catch(std::exception& e) {
-        std::cerr << e.what() << std::endl;
+        std::cerr << e.what() << "\n";
         exit(1);
     }
 }
