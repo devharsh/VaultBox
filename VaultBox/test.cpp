@@ -10,9 +10,12 @@
 int main() {
     try{
         std::vector<std::string>  vaultBox;
-        std::vector<std::string>  symStore;
+        std::vector<vbSymbol>     symStore;
         std::vector<unsigned long> indexes;
         std::vector<unsigned long> indices;
+        
+        std::vector<CryptoPP::SecByteBlock> ekeyVec;
+        std::vector<CryptoPP::SecByteBlock> akeyVec;
         
         // SENDER
         
@@ -34,25 +37,24 @@ int main() {
         std::string password = "Super secret password";
         
         CryptoPP::SecByteBlock ekey(16), iv(16), akey(16);
-        CryptoPP::SecByteBlock ekey2(16),iv2(16),akey2(16);
         
         DeriveKeyAndIV(password, "authenticated encryption example", 100,
                        ekey, ekey.size(), iv, iv.size(), akey, akey.size());
+        if(logEnable) { PrintKeyAndIV(ekey, iv, akey); }
         
-        ekey2 = ekey;
-        iv2 = iv;
-        akey2 = akey;
+        // for test (sender does not store all keys but the latest one)
+        for(int q=0; q<maxAlerts; q++) {
+            forwardKeygen(ekey, ekeyVec, akeyVec);
+        }
         
         for(int i=0; i<bufferSize; i++) {
             totalAlertCount++;
             std::string alert = std::to_string(totalAlertCount) + delimiter + "It is a string!";
             for (unsigned long j=0; j<redundancyFactor; j++) {
                 indexCount = indexCount % maxAlerts;
-                vaultBox[indexes[indexCount]] = encryptAlert(ekey, iv, akey, alert);
+                vaultBox[indexes[indexCount]] = encryptAlert(ekeyVec[indexCount], iv, akeyVec[indexCount], alert);
                 
-                std::string msg = vaultBox[indexes[indexCount]];
-                forwardKeygen(msg, ekey, akey);
-                
+                // subroutine to check vaultBox[] hash periodically
                 CryptoPP::HexEncoder verify_encoder(new CryptoPP::FileSink(std::cout));
                 std::string verify_digest;
                 CryptoPP::SHA256 verify_hash;
@@ -74,6 +76,12 @@ int main() {
             }
         }
         
+        if(logEnable) {
+            for(std::string p_this: vaultBox) {
+                std::cout << p_this << "\n";
+            }
+        }
+        
         std::string pass_c = "1234567812345678";
         CryptoPP::SecByteBlock key_c(reinterpret_cast<const CryptoPP::byte*>(pass_c.data()), pass_c.size());
         sendVaultBox(key_c, key_c, key_c, vaultBox, indices, symStore);
@@ -81,20 +89,31 @@ int main() {
         // RECEIVER
         
         // randomly drop symbols to simulate noisy channel
-        if(logEnable) { std::cout << "VaultBox size is " << vaultBox.size() << "\n"; }
-        for(int f=0; f<(maxAlerts/12); f++) {
-            vaultBox.erase(vaultBox.begin() + (std::rand()%vaultBox.size()));
+        if(logEnable) {
+            std::cout << "Total symbols are " << symStore.size() << "\n";
+            for(int f = 0; f < (symSize/1.75); f++) {
+                int delId = std::rand()%symStore.size();
+                symStore.erase(symStore.begin() + delId);
+                std::cout << delId << "\n";
+            }
+            std::cout << "Total symbols are " << symStore.size() << "\n";
         }
-        if(logEnable) { std::cout << "VaultBox size is " << vaultBox.size() << "\n"; }
         
-        iota(indices.begin(), indices.end(), 0);
         iota(indexes.begin(), indexes.end(), 0);
-        readVaultBox(key_c, key_c, key_c, vaultBox, indices, symStore);
+        readVaultBox(key_c, key_c, key_c, vaultBox, symStore);
         std::mt19937 mtGen(num_ranDev);
         shuffle(indexes.begin(), indexes.end(), mtGen);
         //decryptAES_GCM_AEAD(ekey, iv, idxCnt);
         //decryptChaChaPoly(ekey, iv, idxCnt);
-        decryptVaultBox(ekey2, iv2, akey2, indexCount, prevSeq, prevAlert, vaultBox, indexes);
+        
+        if(logEnable) {
+            PrintKeyAndIV(ekey, iv, akey);
+            for(std::string p_this: vaultBox) {
+                std::cout << p_this << "\n";
+            }
+        }
+        
+        decryptVaultBox(ekey, iv, akey, indexCount, prevSeq, prevAlert, vaultBox, indexes);
         
         return 0;
     }

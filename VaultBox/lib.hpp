@@ -31,9 +31,9 @@
 #include <vector>
 #include <random>
 
-#define redundancyFactor 5
-#define degreeVal 10
-#define bufferSize 50
+#define redundancyFactor 3
+#define degreeVal 4
+#define bufferSize 5
 #define maxAlerts (redundancyFactor * bufferSize)
 #define delimiter '?'
 #define TAG_SIZE 16
@@ -41,32 +41,36 @@
 #define seedVal 10
 #define logEnable false
 
+struct vbSymbol {
+    std::vector<int> indices;
+    std::string data;
+};
+
 unsigned int shuffleIndexes(std::vector<unsigned long>& indexes);
 
-void sendVaultBox(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv, CryptoPP::SecByteBlock& akey,
+void sendVaultBox(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv, CryptoPP::SecByteBlock akey,
                   std::vector<std::string>& vaultBox, std::vector<unsigned long>& indices,
-                  std::vector<std::string>& symStore);
+                  std::vector<vbSymbol>& symStore);
 
 void DeriveKeyAndIV(const std::string& master, const std::string& salt, unsigned int iterations,
                     CryptoPP::SecByteBlock& ekey, unsigned long eksize,
                     CryptoPP::SecByteBlock& iv, unsigned long vsize,
                     CryptoPP::SecByteBlock& akey, unsigned long aksize);
 
-std::string encryptAlert(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv,
-                         CryptoPP::SecByteBlock& akey, std::string alert);
+std::string encryptAlert(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv,
+                         CryptoPP::SecByteBlock akey, std::string alert);
 
 std::string encryptChaChaPoly(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, std::string alert);
 
 std::string encryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, std::string alert);
 
 void readVaultBox(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv, CryptoPP::SecByteBlock& akey,
-                  std::vector<std::string>& vaultBox, std::vector<unsigned long>& indices,
-                  std::vector<std::string>& symStore);
+                  std::vector<std::string>& vaultBox, std::vector<vbSymbol>& symStore);
 
-std::string decryptAlert(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv,
-                         CryptoPP::SecByteBlock& akey, std::string alert);
+std::string decryptAlert(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv,
+                         CryptoPP::SecByteBlock akey, std::string alert);
 
-void decryptVaultBox(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv, CryptoPP::SecByteBlock& akey,
+void decryptVaultBox(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv, CryptoPP::SecByteBlock akey,
                      unsigned long idxCnt, unsigned long& prevSeq, std::string& prevAlert,
                      std::vector<std::string>& vaultBox, std::vector<unsigned long>& indexes);
 
@@ -82,6 +86,8 @@ void decryptChaChaPoly(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, 
 void decryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, unsigned long idxCnt,
                          std::vector<std::string>& vaultBox, std::vector<unsigned long>& indexes);
 
-void forwardKeygen(std::string msg, CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& akey);
+void forwardKeygen(CryptoPP::SecByteBlock ekey,
+                   std::vector<CryptoPP::SecByteBlock>& ekeyVec,
+                   std::vector<CryptoPP::SecByteBlock>& akeyVec);
 
 #endif /* lib_hpp */

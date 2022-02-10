@@ -15,16 +15,19 @@ unsigned int shuffleIndexes(std::vector<unsigned long>& indexes) {
     return num_ranDev;
 }
 
-void sendVaultBox(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv, CryptoPP::SecByteBlock& akey,
+void sendVaultBox(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv, CryptoPP::SecByteBlock akey,
                   std::vector<std::string>& vaultBox, std::vector<unsigned long>& indices,
-                  std::vector<std::string>& symStore) {
+                  std::vector<vbSymbol>& symStore) {
     srand(seedVal);
     std::mt19937 mtGenS(seedVal);
     
     for(int i = 0; i < symSize; i++) {
         unsigned long degree = std::rand() % degreeVal;
         std::shuffle(indices.begin(), indices.end(), mtGenS);
-        std::string cur_symbol = vaultBox[indices[0]];
+        
+        vbSymbol cur_symbol;
+        cur_symbol.data= vaultBox[indices[0]];
+        cur_symbol.indices.push_back(indices[0]);
         
         if(logEnable) {
             std::cout << degree << "\t";
@@ -33,10 +36,11 @@ void sendVaultBox(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv, Cryp
         
         if(degree > 0) {
             for(unsigned long j = 1; j <= degree; j++) {
-                long* newd1 = reinterpret_cast<long*>(&cur_symbol[0]);
+                cur_symbol.indices.push_back(indices[j]);
+                long* newd1 = reinterpret_cast<long*>(&cur_symbol.data[0]);
                 long* newd2 = reinterpret_cast<long*>(&vaultBox[indices[j]][0]);
                 if(logEnable) { std::cout << indices[j] << ", "; }
-                for(unsigned long q = 0; q < cur_symbol.length() / 8; q += 4)
+                for(unsigned long q = 0; q < cur_symbol.data.length() / 8; q += 4)
                 {
                     newd1[q] = newd1[q] ^ newd2[q];
                     newd1[q+1] = newd1[q+1] ^ newd2[q+1];
@@ -45,8 +49,9 @@ void sendVaultBox(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv, Cryp
                 }
             }
         }
+        
         if(logEnable) { std::cout << "\n"; }
-        cur_symbol = encryptAlert(ekey, iv, akey, cur_symbol);
+        cur_symbol.data = encryptAlert(ekey, iv, akey, cur_symbol.data);
         symStore.push_back(cur_symbol);
     }
 }
@@ -99,12 +104,12 @@ void DeriveKeyAndIV(const std::string& master, const std::string& salt, unsigned
                     iterations);
 }
 
-std::string encryptAlert(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv,
-                         CryptoPP::SecByteBlock& akey, std::string alert) {
+std::string encryptAlert(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv,
+                         CryptoPP::SecByteBlock akey, std::string alert) {
     CryptoPP::CBC_Mode<CryptoPP::AES>::Encryption encryptor;
-    CryptoPP::HMAC<CryptoPP::SHA256> hmac;
-    
     encryptor.SetKeyWithIV(ekey, ekey.size(), iv, iv.size());
+    
+    CryptoPP::HMAC<CryptoPP::SHA256> hmac;
     hmac.SetKey(akey, akey.size());
     
     std::string cipher;
@@ -180,7 +185,7 @@ std::string encryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBl
     CryptoPP::SecByteBlock new_key(reinterpret_cast<const CryptoPP::byte*>(cipher.data()), cipher.size());
     key = CryptoPP::SecByteBlock(new_key, 16);
     
-    if(logEnable){
+    if(logEnable) {
         std::cout << "plain text: " << alert << std::endl;
         std::cout << "cipher text: " << std::endl << " " << encoded << std::endl;
     }
@@ -189,26 +194,24 @@ std::string encryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBl
 }
 
 void readVaultBox(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv, CryptoPP::SecByteBlock& akey,
-                  std::vector<std::string>& vaultBox, std::vector<unsigned long>& indices,
-                  std::vector<std::string>& symStore) {
-    srand(seedVal);
-    std::mt19937 mtGenR(seedVal);
-    
+                  std::vector<std::string>& vaultBox, std::vector<vbSymbol>& symStore) {
     std::vector<std::string> bufferSymbols;
     std::vector<int> degreeSymbols;
     std::vector<std::vector<int>> indexSymbols;
     std::vector<int> doneSymbols;
     
-    for(std::string stringRead : symStore) {
-        bufferSymbols.push_back(decryptAlert(ekey, iv, akey, stringRead));
-        int degree = std::rand() % degreeVal;
+    for(unsigned long numSym = 0; numSym < symStore.size(); numSym++) {
+        vbSymbol cur_sym = symStore[numSym];
+        
+        bufferSymbols.push_back(decryptAlert(ekey, iv, akey, cur_sym.data));
+        int degree = cur_sym.indices.size() - 1;
         degreeSymbols.push_back(degree);
         if(logEnable) { std::cout << degree << "\t"; }
-        std::shuffle(indices.begin(), indices.end(), mtGenR);
+        
         std::vector<int> degreeInsertion;
         for(int j=0; j<=degree; j++) {
-            degreeInsertion.push_back(indices[j]);
-            if(logEnable) { std::cout << indices[j] << ", "; }
+            degreeInsertion.push_back(cur_sym.indices[j]);
+            if(logEnable) { std::cout << cur_sym.indices[j] << ", "; }
         }
         sort(degreeInsertion.begin(), degreeInsertion.end());
         indexSymbols.push_back(degreeInsertion);
@@ -226,8 +229,8 @@ void readVaultBox(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv, Cryp
                 indexSymbols.erase(indexSymbols.begin() + k);
             } else if(degreeSymbols[k] > 0) {
                 if(haltExit > (symSize * 10)) {
-                    std::cerr << "Exiting..Not enough symbols to decode successfully!!" << "\n";
-                    exit(1);
+                    std::cout << "Exiting..Not enough symbols to decode successfully!!" << "\n";
+                    exit(0);
                 }
                 std::vector<int>::iterator it;
                 for(int f: doneSymbols) {
@@ -250,17 +253,18 @@ void readVaultBox(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv, Cryp
     }
 }
 
-std::string decryptAlert(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv,
-                         CryptoPP::SecByteBlock& akey, std::string alert) {
+std::string decryptAlert(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv,
+                         CryptoPP::SecByteBlock akey, std::string alert) {
     CryptoPP::CBC_Mode<CryptoPP::AES>::Decryption decryptor;
+    decryptor.SetKeyWithIV(ekey, ekey.size(), iv, iv.size());
+    
     CryptoPP::HMAC<CryptoPP::SHA256> hmac;
+    hmac.SetKey(akey, akey.size());
     
     CryptoPP::word32 flags = CryptoPP::HashVerificationFilter::HASH_AT_END |
     CryptoPP::HashVerificationFilter::PUT_MESSAGE |
     CryptoPP::HashVerificationFilter::THROW_EXCEPTION;
     
-    decryptor.SetKeyWithIV(ekey, ekey.size(), iv, iv.size());
-    hmac.SetKey(akey, akey.size());
     std::string recover;
     CryptoPP::StringSource ss(alert, true /*pumpAll*/,
                               new CryptoPP::HashVerificationFilter(hmac,
@@ -270,11 +274,16 @@ std::string decryptAlert(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& i
     return recover;
 }
 
-void decryptVaultBox(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv, CryptoPP::SecByteBlock& akey,
+void decryptVaultBox(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv, CryptoPP::SecByteBlock akey,
                      unsigned long idxCnt, unsigned long& prevSeq, std::string &prevAlert,
                      std::vector<std::string>& vaultBox, std::vector<unsigned long>& indexes) {
+    std::vector<CryptoPP::SecByteBlock> ekeyVec;
+    std::vector<CryptoPP::SecByteBlock> akeyVec;
+    
+    for(int q=0; q<maxAlerts; q++) { forwardKeygen(ekey, ekeyVec, akeyVec); }
+    
     for (unsigned long i=0; i<idxCnt; i++) {
-        std::string recover = decryptAlert(ekey, iv, akey, vaultBox[indexes[i]]);
+        std::string recover = decryptAlert(ekeyVec[indexes[i]], iv, akeyVec[indexes[i]], vaultBox[indexes[i]]);
         
         if(logEnable) {
             PrintKeyAndIV(ekey, iv, akey);
@@ -289,11 +298,7 @@ void decryptVaultBox(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv, C
             std::cout << std::endl;
         }
         
-        if(i == 0)
-            prevAlert.assign(recover);
-        
-        std::string msg = vaultBox[indexes[i]];
-        forwardKeygen(msg, ekey, akey);
+        if(i == 0) { prevAlert.assign(recover); }
         
         sequenceChecker(recover, prevAlert, prevSeq);
         vaultBox[indexes[i]] = recover;
@@ -305,17 +310,17 @@ void PrintKeyAndIV(CryptoPP::SecByteBlock& ekey,
                    CryptoPP::SecByteBlock& akey) {
     CryptoPP::HexEncoder encoder(new CryptoPP::FileSink(std::cout));
     
-    std::cout << "AES key: ";
+    std::cout << "ekey: ";
     encoder.Put(ekey.data(), ekey.size());
     encoder.MessageEnd();
     std::cout << std::endl;
     
-    std::cout << "AES IV: ";
+    std::cout << "iv: ";
     encoder.Put(iv.data(), iv.size());
     encoder.MessageEnd();
     std::cout << std::endl;
     
-    std::cout << "HMAC key: ";
+    std::cout << "akey: ";
     encoder.Put(akey.data(), akey.size());
     encoder.MessageEnd();
     std::cout << std::endl;
@@ -334,8 +339,7 @@ void sequenceChecker(std::string recover, std::string& prevAlert, unsigned long&
 }
 
 void identityChecker(std::string nextAlert, std::string prevAlert) {
-    if(prevAlert.compare(nextAlert) != 0)
-        std::cout << "Error: Alert mismatch!!" << std::endl;
+    if(prevAlert.compare(nextAlert) != 0) { std::cout << "Error: Alert mismatch!!" << std::endl; }
 }
 
 void decryptChaChaPoly(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, unsigned long idxCnt,
@@ -403,10 +407,12 @@ void decryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv
     }
 }
 
-void forwardKeygen(std::string msg, CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& akey) {
+void forwardKeygen(CryptoPP::SecByteBlock ekey,
+                   std::vector<CryptoPP::SecByteBlock>& ekeyVec,
+                   std::vector<CryptoPP::SecByteBlock>& akeyVec) {
     std::string digest;
     CryptoPP::SHA256 hash;
-    hash.Update((const CryptoPP::byte*)msg.data(), msg.size());
+    hash.Update(ekey.data(), ekey.size());
     digest.resize(hash.DigestSize());
     hash.Final((CryptoPP::byte*)&digest[0]);
     
@@ -414,6 +420,7 @@ void forwardKeygen(std::string msg, CryptoPP::SecByteBlock& ekey, CryptoPP::SecB
     std::string otherHalf = digest.substr(digest.length()/2);
     CryptoPP::SecByteBlock new_key(reinterpret_cast<const CryptoPP::byte*>(&half[0]), half.size());
     CryptoPP::SecByteBlock new_key2(reinterpret_cast<const CryptoPP::byte*>(&otherHalf[0]), otherHalf.size());
-    ekey = CryptoPP::SecByteBlock(new_key, 16);
-    akey = CryptoPP::SecByteBlock(new_key2,16);
+    
+    ekeyVec.push_back(CryptoPP::SecByteBlock(new_key, 16));
+    akeyVec.push_back(CryptoPP::SecByteBlock(new_key2,16));
 }
