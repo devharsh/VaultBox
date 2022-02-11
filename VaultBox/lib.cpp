@@ -276,13 +276,18 @@ std::string decryptAlert(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv,
 
 void decryptVaultBox(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv, CryptoPP::SecByteBlock akey,
                      unsigned long idxCnt, unsigned long& prevSeq, std::string &prevAlert,
-                     std::vector<std::string>& vaultBox, std::vector<unsigned long>& indexes) {
+                     std::vector<std::string>& vaultBox, std::vector<unsigned long>& indexes,
+                     std::vector<CryptoPP::SecByteBlock>& ekeyMaster,
+                     std::vector<CryptoPP::SecByteBlock>& akeyMaster) {
     std::vector<CryptoPP::SecByteBlock> ekeyVec;
     std::vector<CryptoPP::SecByteBlock> akeyVec;
     
-    for(int q=0; q<maxAlerts; q++) { forwardKeygen(ekey, ekeyVec, akeyVec); }
+    for(int q=0; q<idxCnt; q++) { forwardKeygen(ekey, ekeyVec, akeyVec); }
     
     for (unsigned long i=0; i<idxCnt; i++) {
+        ekeyMaster[indexes[i]] = ekeyVec[indexes[i]];
+        akeyMaster[indexes[i]] = akeyVec[indexes[i]];
+        
         std::string recover = decryptAlert(ekeyVec[indexes[i]], iv, akeyVec[indexes[i]], vaultBox[indexes[i]]);
         
         if(logEnable) {
@@ -302,6 +307,11 @@ void decryptVaultBox(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv, Cry
         
         sequenceChecker(recover, prevAlert, prevSeq);
         vaultBox[indexes[i]] = recover;
+    }
+    
+    // to detect modifications between sessions
+    for (unsigned long i=idxCnt; i<maxAlerts; i++) {
+        decryptAlert(ekeyMaster[indexes[i]], iv, ekeyMaster[indexes[i]], vaultBox[indexes[i]]);
     }
 }
 

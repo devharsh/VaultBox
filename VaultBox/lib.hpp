@@ -72,7 +72,9 @@ std::string decryptAlert(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv,
 
 void decryptVaultBox(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv, CryptoPP::SecByteBlock akey,
                      unsigned long idxCnt, unsigned long& prevSeq, std::string& prevAlert,
-                     std::vector<std::string>& vaultBox, std::vector<unsigned long>& indexes);
+                     std::vector<std::string>& vaultBox, std::vector<unsigned long>& indexes,
+                     std::vector<CryptoPP::SecByteBlock>& ekeyMaster,
+                     std::vector<CryptoPP::SecByteBlock>& akeyMaster);
 
 void PrintKeyAndIV(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv, CryptoPP::SecByteBlock& akey);
 

@@ -47,6 +47,8 @@ int main() {
             forwardKeygen(ekey, ekeyVec, akeyVec);
         }
         
+        // for each session set indexCount = 0
+        
         for(int i=0; i<bufferSize; i++) {
             totalAlertCount++;
             std::string alert = std::to_string(totalAlertCount) + delimiter + "It is a string!";
@@ -121,7 +123,12 @@ int main() {
             }
         }
         
-        decryptVaultBox(ekey, iv, akey, indexCount, prevSeq, prevAlert, vaultBox, indexes);
+        // to detect modifications between sessions
+        std::vector<CryptoPP::SecByteBlock> ekeyMaster(maxAlerts);
+        std::vector<CryptoPP::SecByteBlock> akeyMaster(maxAlerts);
+        
+        decryptVaultBox(ekey, iv, akey, indexCount, prevSeq, prevAlert,
+                        vaultBox, indexes, ekeyMaster, akeyMaster);
         
         return 0;
     }
