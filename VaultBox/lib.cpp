@@ -105,7 +105,7 @@ void DeriveKeyAndIV(const std::string& master, const std::string& salt, unsigned
 }
 
 std::string encryptAlert(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv,
-                         CryptoPP::SecByteBlock akey, std::string alert) {
+                         CryptoPP::SecByteBlock akey, std::string pt_msg) {
     CryptoPP::CBC_Mode<CryptoPP::AES>::Encryption encryptor;
     encryptor.SetKeyWithIV(ekey, ekey.size(), iv, iv.size());
     
@@ -113,7 +113,7 @@ std::string encryptAlert(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv,
     hmac.SetKey(akey, akey.size());
     
     std::string cipher;
-    CryptoPP::StringSource ss(alert, true /*pumpAll*/,
+    CryptoPP::StringSource ss(pt_msg, true /*pumpAll*/,
                               new CryptoPP::StreamTransformationFilter(encryptor,
                                                                        new CryptoPP::HashFilter(hmac,
                                                                                                 new CryptoPP::StringSink(cipher),
@@ -122,16 +122,16 @@ std::string encryptAlert(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv,
     return cipher;
 }
 
-std::string encryptChaChaPoly(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, std::string alert) {
+std::string encryptChaChaPoly(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, std::string pt_msg) {
     CryptoPP::XChaCha20Poly1305::Encryption enc;
     CryptoPP::byte aad[] = {0x50,0x51,0x52,0x53,0xc0,0xc1,0xc2,0xc3,0xc4,0xc5,0xc6,0xc7};
-    CryptoPP::byte ct[alert.size()], mac[16];
+    CryptoPP::byte ct[pt_msg.size()], mac[16];
     
     std::string encode;
-    CryptoPP::StringSource(alert, true, new CryptoPP::HexEncoder(new CryptoPP::StringSink(encode)));
+    CryptoPP::StringSource(pt_msg, true, new CryptoPP::HexEncoder(new CryptoPP::StringSink(encode)));
     
     enc.SetKeyWithIV(key, sizeof(key), iv, 24);
-    enc.EncryptAndAuthenticate(ct, mac, sizeof(mac), iv, 24, aad, sizeof(aad), (const CryptoPP::byte*)alert.data(), alert.size());
+    enc.EncryptAndAuthenticate(ct, mac, sizeof(mac), iv, 24, aad, sizeof(aad), (const CryptoPP::byte*)pt_msg.data(), pt_msg.size());
     
     std::string cipher;
     CryptoPP::StringSource(ct, sizeof(ct), true, new CryptoPP::HexEncoder(new CryptoPP::StringSink(cipher)));
@@ -156,7 +156,7 @@ std::string encryptChaChaPoly(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBloc
     key = CryptoPP::SecByteBlock(new_key, 16);
     
     if(logEnable) {
-        std::cout << "Plain: " << alert << "\n";
+        std::cout << "Plain: " << pt_msg << "\n";
         std::cout << "Encode: " << encode << "\n";
         std::cout << "Cipher: " << cipher << "\n";
         std::cout << "MAC: " << strMac << "\n";
@@ -167,7 +167,7 @@ std::string encryptChaChaPoly(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBloc
     return cipher + strMac;
 }
 
-std::string encryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, std::string alert) {
+std::string encryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, std::string pt_msg) {
     CryptoPP::GCM<CryptoPP::AES>::Encryption e;
     std::string cipher, encoded, recovered;
     e.SetKeyWithIV(key, key.size(), iv, iv.size());
@@ -176,7 +176,7 @@ std::string encryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBl
     
     ef.ChannelPut("AAD", (const CryptoPP::byte*)key.data(), key.size());
     ef.ChannelMessageEnd("AAD");
-    ef.ChannelPut("", (const CryptoPP::byte*)alert.data(), alert.size());
+    ef.ChannelPut("", (const CryptoPP::byte*)pt_msg.data(), pt_msg.size());
     ef.ChannelMessageEnd("");
     
     CryptoPP::StringSource(cipher, true,
@@ -186,7 +186,7 @@ std::string encryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBl
     key = CryptoPP::SecByteBlock(new_key, 16);
     
     if(logEnable) {
-        std::cout << "plain text: " << alert << "\n";
+        std::cout << "plain text: " << pt_msg << "\n";
         std::cout << "cipher text: " << "\n" << " " << encoded << "\n";
     }
     
@@ -254,7 +254,9 @@ void readVaultBox(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv, Cryp
 }
 
 std::string decryptAlert(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv,
-                         CryptoPP::SecByteBlock akey, std::string alert) {
+                         CryptoPP::SecByteBlock akey, std::string pt_msg) {
+    if(pt_msg.empty()) { std::cout << "skipping decryption.. empty message" << "\n"; }
+    
     CryptoPP::CBC_Mode<CryptoPP::AES>::Decryption decryptor;
     decryptor.SetKeyWithIV(ekey, ekey.size(), iv, iv.size());
     
@@ -266,7 +268,7 @@ std::string decryptAlert(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv,
     CryptoPP::HashVerificationFilter::THROW_EXCEPTION;
     
     std::string recover;
-    CryptoPP::StringSource ss(alert, true /*pumpAll*/,
+    CryptoPP::StringSource ss(pt_msg, true /*pumpAll*/,
                               new CryptoPP::HashVerificationFilter(hmac,
                                                                    new CryptoPP::StreamTransformationFilter(decryptor,
                                                                                                             new CryptoPP::StringSink(recover)),
@@ -428,4 +430,52 @@ void forwardKeygen(CryptoPP::SecByteBlock genkey, CryptoPP::SecByteBlock& ekey, 
     
     ekey = CryptoPP::SecByteBlock(new_key, 16);
     akey = CryptoPP::SecByteBlock(new_key2,16);
+}
+
+std::vector<double> ideal_distribution(int n) {
+    if(n < 1) { throw std::logic_error("n should be at least 1!"); }
+    
+    double sum = 0.0;
+    std::vector<double> probabilities(n + 1);
+    
+    // calculate probabilities of ideal_distribution
+    probabilities[0] = 0;
+    probabilities[1] = 1 / (double)n;
+    for(int i = 2; i <= n; ++i) { probabilities[i] = 1 / (double)(i * (i - 1)); }
+    
+    // test : sum of probabilities must equal to 1
+    for(double number : probabilities) { sum += number; }
+    if(abs(1 - sum) > 0.000001) {
+        std::cerr << "sum : " << sum << std::endl;
+        throw std::runtime_error("sum of probabilities not equal to 1!");
+    }
+    
+    return probabilities;
+}
+
+std::vector<double> robust_distribution(int n) {
+    double RFP = 0.01;
+    int m = n / 2 + 1;
+    double sum = 0.0;
+    
+    std::vector<double> probabilities(n + 1, 0);
+    std::vector<double> ideal_pros = ideal_distribution(n);
+    
+    // calculate probabilities of robust_distribution
+    for(int i = 1; i < m; ++i) { probabilities[i] = 1 / (double)(i * m); }
+    probabilities[m] = log(n / ((double)m * RFP)) / (double)m;
+    
+    for(int i = 0; i <= n; ++i) { probabilities[i] += ideal_pros[i]; }
+    for(double number : probabilities) { sum += number; }
+    for(double& num : probabilities) { num /= sum; }
+    
+    // test : sum of probabilities must equal to 1
+    sum = 0;
+    for(double number : probabilities) { sum += number; }
+    if(abs(1 - sum) > 0.000001) {
+        std::cerr << "sum : " << sum << std::endl;
+        throw std::runtime_error("sum of probabilities not equal to 1!");
+    }
+    
+    return probabilities;
 }

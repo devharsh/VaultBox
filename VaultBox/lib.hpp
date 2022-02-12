@@ -32,14 +32,14 @@
 #include <random>
 
 #define redundancyFactor 2
-#define degreeVal 3
-#define bufferSize 4
+#define bufferSize 3
 #define maxAlerts (redundancyFactor * bufferSize)
+#define degreeVal (maxAlerts / 2)
 #define delimiter '?'
 #define TAG_SIZE 16
 #define symSize (redundancyFactor * maxAlerts)
 #define seedVal 10
-#define logEnable true
+#define logEnable false
 
 struct vbSymbol {
     std::vector<int> indices;
@@ -58,17 +58,17 @@ void DeriveKeyAndIV(const std::string& master, const std::string& salt, unsigned
                     CryptoPP::SecByteBlock& akey, unsigned long aksize);
 
 std::string encryptAlert(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv,
-                         CryptoPP::SecByteBlock akey, std::string alert);
+                         CryptoPP::SecByteBlock akey, std::string pt_msg);
 
-std::string encryptChaChaPoly(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, std::string alert);
+std::string encryptChaChaPoly(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, std::string pt_msg);
 
-std::string encryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, std::string alert);
+std::string encryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, std::string pt_msg);
 
 void readVaultBox(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv, CryptoPP::SecByteBlock& akey,
                   std::vector<std::string>& vaultBox, std::vector<vbSymbol>& symStore);
 
 std::string decryptAlert(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv,
-                         CryptoPP::SecByteBlock akey, std::string alert);
+                         CryptoPP::SecByteBlock akey, std::string pt_msg);
 
 void decryptVaultBox(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv, CryptoPP::SecByteBlock akey,
                      unsigned long idxCnt, unsigned long& prevSeq, std::string& prevAlert,
@@ -89,5 +89,9 @@ void decryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv
                          std::vector<std::string>& vaultBox, std::vector<unsigned long>& indexes);
 
 void forwardKeygen(CryptoPP::SecByteBlock genkey, CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& akey);
+
+std::vector<double> ideal_distribution(int n);
+
+std::vector<double> robust_distribution(int n);
 
 #endif /* lib_hpp */

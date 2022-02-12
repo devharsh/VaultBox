@@ -9,11 +9,29 @@
 
 int main() {
     try{
+        std::vector<double> probabilities = robust_distribution(maxAlerts);
+        std::vector<long>   discreteD(maxAlerts, 0);
+        std::vector<int>    random_degrees(symSize, 0);
+        
+        random_degrees[0] = 1;
+        for(int p_this = 0; p_this < probabilities.size(); p_this++) {
+            discreteD[p_this] = lround(1e6 * probabilities[p_this]);
+            std::cout << p_this << "\t" << discreteD[p_this] << "\n";
+        }
+        
+        std::discrete_distribution<long> ranD(discreteD.begin(), discreteD.end());
+        std::default_random_engine e;
+        
+        for(int i = 1; i < symSize; ++i) {
+            random_degrees[i] = ranD(e);
+            std::cout << random_degrees[i] << "\n";
+        }
+        std::cout << "\n";
         
         // SENDER global variables
         unsigned long totalAlertCount = 0;
         std::vector<std::string> vaultBox;
-        for(unsigned long i=0; i<maxAlerts; i++) {vaultBox.push_back("it is the default string.. for now");}
+        for(unsigned long i=0; i<maxAlerts; i++) { vaultBox.push_back("it is the default string.. for now"); }
         
         // RECEIVER global variables
         std::vector<CryptoPP::SecByteBlock> ekeyMaster(maxAlerts);
@@ -21,7 +39,8 @@ int main() {
         
         // COMMON global variables
         std::string password = "Super secret password";
-        std::string pass_c = "1234567812345678";
+        std::string pass_c = "FEDCBA9876543210";
+        
         
         // simulate sessions
         for(int isession = 0; isession < 4; isession++) {
@@ -41,16 +60,18 @@ int main() {
             }
             
             unsigned int num_ranDev = shuffleIndexes(indexes);
-            
-            CryptoPP::SecByteBlock  ekey(16), iv(16), akey(16);
-            CryptoPP::SecByteBlock ekey2(16),iv2(16),akey2(16);
-            
+            CryptoPP::SecByteBlock ekey(16), iv(16), akey(16);
             DeriveKeyAndIV(password, "authenticated encryption example", 100,
                            ekey, ekey.size(), iv, iv.size(), akey, akey.size());
             
+            
+            // RECEIVER session variables
+            unsigned int num_ranDev2 = num_ranDev;
+            CryptoPP::SecByteBlock ekey2(16),iv2(16),akey2(16);
             ekey2 = ekey;
             iv2 = iv;
             akey2 = akey;
+            
             
             if(logEnable) { PrintKeyAndIV(ekey, iv, akey); }
             
@@ -96,14 +117,13 @@ int main() {
             
             if(logEnable) {
                 std::cout << "\n";
-                for(std::string p_this: vaultBox) {
-                    std::cout << p_this << "\n";
-                }
+                for(std::string p_this: vaultBox) { std::cout << p_this << "\n"; }
                 std::cout << "\n";
             }
             
             CryptoPP::SecByteBlock key_c(reinterpret_cast<const CryptoPP::byte*>(pass_c.data()), pass_c.size());
             sendVaultBox(key_c, key_c, key_c, vaultBox, indices, symStore);
+            
             
             // RECEIVER session variables
             std::vector<std::string>   r_vaultBox(maxAlerts);
@@ -125,20 +145,27 @@ int main() {
             if(logEnable) {
                 std::cout << "\n";
                 PrintKeyAndIV(ekey, iv, akey);
-                for(std::string p_this: vaultBox) {
-                    std::cout << p_this << "\n";
-                }
+                for(std::string p_this: vaultBox) { std::cout << p_this << "\n"; }
                 std::cout << "\n";
             }
             
             iota(r_indexes.begin(), r_indexes.end(), 0);
-            std::mt19937 mtGen(num_ranDev);
+            std::mt19937 mtGen(num_ranDev2);
             shuffle(r_indexes.begin(), r_indexes.end(), mtGen);
             //decryptAES_GCM_AEAD(ekey, iv, idxCnt);
             //decryptChaChaPoly(ekey, iv, idxCnt);
             
             decryptVaultBox(ekey2, iv2, akey2, indexCount, prevSeq, prevAlert,
                             r_vaultBox, r_indexes, ekeyMaster, akeyMaster);
+            
+            
+            // Forward-secure XOR key
+            CryptoPP::SHA256 hash;
+            hash.Update((const CryptoPP::byte*)pass_c.data(), pass_c.size());
+            pass_c.resize(hash.DigestSize());
+            hash.Final((CryptoPP::byte*)&pass_c[0]);
+            pass_c = pass_c.substr(0, pass_c.length()/2);
+            password = pass_c;
         }
         
         return 0;
