@@ -30,11 +30,6 @@ int main() {
             std::vector<vbSymbol>     symStore;
             std::vector<unsigned long> indexes;
             std::vector<unsigned long> indices;
-            
-            std::vector<CryptoPP::SecByteBlock> ekeyVec;
-            std::vector<CryptoPP::SecByteBlock> akeyVec;
-            
-            std::vector<CryptoPP::byte> byteBox;
             std::string prevAlert;
             
             unsigned long indexCount = 0;
@@ -47,24 +42,28 @@ int main() {
             
             unsigned int num_ranDev = shuffleIndexes(indexes);
             
-            CryptoPP::SecByteBlock ekey(16), iv(16), akey(16);
+            CryptoPP::SecByteBlock  ekey(16), iv(16), akey(16);
+            CryptoPP::SecByteBlock ekey2(16),iv2(16),akey2(16);
             
             DeriveKeyAndIV(password, "authenticated encryption example", 100,
                            ekey, ekey.size(), iv, iv.size(), akey, akey.size());
             
+            ekey2 = ekey;
+            iv2 = iv;
+            akey2 = akey;
+            
             if(logEnable) { PrintKeyAndIV(ekey, iv, akey); }
             
-            // for test (sender does not store all keys but the latest one)
-            for(int q=0; q<maxAlerts; q++) { forwardKeygen(ekey, ekeyVec, akeyVec); }
-            
-            for(int i = 0; i < bufferSize - isession; i++) {
+            // to simulate different message size for each session
+            for(int i = 0; i < bufferSize /*- isession*/; i++) {
                 totalAlertCount++;
                 std::string alert = std::to_string(totalAlertCount) + delimiter + "It is a string!";
                 
                 for (unsigned long j=0; j<redundancyFactor; j++) {
                     indexCount = indexCount % maxAlerts;
                     
-                    vaultBox[indexes[indexCount]] = encryptAlert(ekeyVec[indexCount], iv, akeyVec[indexCount], alert);
+                    forwardKeygen(ekey, ekey, akey);
+                    vaultBox[indexes[indexCount]] = encryptAlert(ekey, iv, akey, alert);
                     
                     // subroutine to check vaultBox[] hash periodically
                     CryptoPP::HexEncoder verify_encoder(new CryptoPP::FileSink(std::cout));
@@ -138,7 +137,7 @@ int main() {
             //decryptAES_GCM_AEAD(ekey, iv, idxCnt);
             //decryptChaChaPoly(ekey, iv, idxCnt);
             
-            decryptVaultBox(ekey, iv, akey, indexCount, prevSeq, prevAlert,
+            decryptVaultBox(ekey2, iv2, akey2, indexCount, prevSeq, prevAlert,
                             r_vaultBox, r_indexes, ekeyMaster, akeyMaster);
         }
         

@@ -88,8 +88,6 @@ void decryptChaChaPoly(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, 
 void decryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, unsigned long idxCnt,
                          std::vector<std::string>& vaultBox, std::vector<unsigned long>& indexes);
 
-void forwardKeygen(CryptoPP::SecByteBlock ekey,
-                   std::vector<CryptoPP::SecByteBlock>& ekeyVec,
-                   std::vector<CryptoPP::SecByteBlock>& akeyVec);
+void forwardKeygen(CryptoPP::SecByteBlock genkey, CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& akey);
 
 #endif /* lib_hpp */

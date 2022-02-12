@@ -279,15 +279,10 @@ void decryptVaultBox(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv, Cry
                      std::vector<std::string>& vaultBox, std::vector<unsigned long>& indexes,
                      std::vector<CryptoPP::SecByteBlock>& ekeyMaster,
                      std::vector<CryptoPP::SecByteBlock>& akeyMaster) {
-    std::vector<CryptoPP::SecByteBlock> ekeyVec;
-    std::vector<CryptoPP::SecByteBlock> akeyVec;
-    
-    for(int q=0; q<maxAlerts; q++) { forwardKeygen(ekey, ekeyVec, akeyVec); }
-    
     for (unsigned long i=0; i<maxAlerts; i++) {
         if(i < idxCnt) {
-            ekeyMaster[indexes[i]] = ekeyVec[indexes[i]];
-            akeyMaster[indexes[i]] = akeyVec[indexes[i]];
+            forwardKeygen(ekey, ekeyMaster[indexes[i]], akeyMaster[indexes[i]]);
+            ekey = ekeyMaster[indexes[i]];
         }
         
         std::string recover = decryptAlert(ekeyMaster[indexes[i]], iv, akeyMaster[indexes[i]], vaultBox[indexes[i]]);
@@ -417,20 +412,20 @@ void decryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv
     }
 }
 
-void forwardKeygen(CryptoPP::SecByteBlock ekey,
-                   std::vector<CryptoPP::SecByteBlock>& ekeyVec,
-                   std::vector<CryptoPP::SecByteBlock>& akeyVec) {
+void forwardKeygen(CryptoPP::SecByteBlock genkey, CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& akey) {
     std::string digest;
     CryptoPP::SHA256 hash;
-    hash.Update(ekey.data(), ekey.size());
+    
+    hash.Update(genkey.data(), genkey.size());
     digest.resize(hash.DigestSize());
     hash.Final((CryptoPP::byte*)&digest[0]);
     
     std::string half = digest.substr(0, digest.length()/2);
     std::string otherHalf = digest.substr(digest.length()/2);
+    
     CryptoPP::SecByteBlock new_key(reinterpret_cast<const CryptoPP::byte*>(&half[0]), half.size());
     CryptoPP::SecByteBlock new_key2(reinterpret_cast<const CryptoPP::byte*>(&otherHalf[0]), otherHalf.size());
     
-    ekeyVec.push_back(CryptoPP::SecByteBlock(new_key, 16));
-    akeyVec.push_back(CryptoPP::SecByteBlock(new_key2,16));
+    ekey = CryptoPP::SecByteBlock(new_key, 16);
+    akey = CryptoPP::SecByteBlock(new_key2,16);
 }
