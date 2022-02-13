@@ -18,11 +18,36 @@ unsigned int shuffleIndexes(std::vector<unsigned long>& indexes) {
 void sendVaultBox(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv, CryptoPP::SecByteBlock akey,
                   std::vector<std::string>& vaultBox, std::vector<unsigned long>& indices,
                   std::vector<vbSymbol>& symStore) {
+    // Option 1 - Uniform random distribution
     srand(seedVal);
     std::mt19937 mtGenS(seedVal);
     
+    // Option 2 - Robust soliton distribution
+    std::vector<double> probabilities = robust_distribution(maxAlerts);
+    std::vector<long>   discreteD(maxAlerts, 0);
+    std::vector<int>    random_degrees(symSize, 0);
+    
+    for(int p_this = 0; p_this < probabilities.size(); p_this++) {
+        discreteD[p_this] = lround(1e6 * probabilities[p_this]);
+        if(logEnable) { std::cout << p_this << "\t" << discreteD[p_this] << "\n"; }
+    }
+    if(logEnable) { std::cout << "\n"; }
+    
+    std::discrete_distribution<long> ranD(discreteD.begin(), discreteD.end());
+    std::default_random_engine e;
+    
+    
     for(int i = 0; i < symSize; i++) {
-        unsigned long degree = std::rand() % degreeVal;
+        unsigned long degree;
+        
+        // Option 1 - Uniform random distribution
+        //degree = std::rand() % degreeVal;
+        
+        // Option 2 - Robust soliton distribution
+        if(i == 0) { degree = 0; }
+        else if(i > 0) { degree = ranD(e) - 1; }
+        else { exit(1); }
+        
         std::shuffle(indices.begin(), indices.end(), mtGenS);
         
         vbSymbol cur_symbol;
@@ -229,7 +254,7 @@ void readVaultBox(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv, Cryp
                 indexSymbols.erase(indexSymbols.begin() + k);
             } else if(degreeSymbols[k] > 0) {
                 if(haltExit > (symSize * 10)) {
-                    std::cout << "Exiting..Not enough symbols to decode successfully!!" << "\n";
+                    std::cout << "\nExiting..Not enough symbols to decode successfully!!\n";
                     exit(0);
                 }
                 std::vector<int>::iterator it;
@@ -339,7 +364,7 @@ void sequenceChecker(std::string recover, std::string& prevAlert, unsigned long&
     
     if(nextSeq - prevSeq == 1) {}
     else if(nextSeq - prevSeq == 0) { identityChecker(recover, prevAlert); }
-    else { std::cout << "missing sequence" << "\n"; }
+    else { std::cout << prevSeq << "\t" << nextSeq << "\t" << "missing sequence" << "\n"; }
     
     prevSeq = nextSeq;
     prevAlert.assign(recover);

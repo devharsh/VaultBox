@@ -9,24 +9,6 @@
 
 int main() {
     try{
-        std::vector<double> probabilities = robust_distribution(maxAlerts);
-        std::vector<long>   discreteD(maxAlerts, 0);
-        std::vector<int>    random_degrees(symSize, 0);
-        
-        random_degrees[0] = 1;
-        for(int p_this = 0; p_this < probabilities.size(); p_this++) {
-            discreteD[p_this] = lround(1e6 * probabilities[p_this]);
-            std::cout << p_this << "\t" << discreteD[p_this] << "\n";
-        }
-        
-        std::discrete_distribution<long> ranD(discreteD.begin(), discreteD.end());
-        std::default_random_engine e;
-        
-        for(int i = 1; i < symSize; ++i) {
-            random_degrees[i] = ranD(e);
-            std::cout << random_degrees[i] << "\n";
-        }
-        std::cout << "\n";
         
         // SENDER global variables
         unsigned long totalAlertCount = 0;
@@ -36,6 +18,8 @@ int main() {
         // RECEIVER global variables
         std::vector<CryptoPP::SecByteBlock> ekeyMaster(maxAlerts);
         std::vector<CryptoPP::SecByteBlock> akeyMaster(maxAlerts);
+        std::string prevAlert;
+        unsigned long prevSeq = 0;
         
         // COMMON global variables
         std::string password = "Super secret password";
@@ -49,10 +33,8 @@ int main() {
             std::vector<vbSymbol>     symStore;
             std::vector<unsigned long> indexes;
             std::vector<unsigned long> indices;
-            std::string prevAlert;
             
             unsigned long indexCount = 0;
-            unsigned long prevSeq = 0;
             
             for(unsigned long i=0; i<maxAlerts; i++) {
                 indexes.push_back(i);
