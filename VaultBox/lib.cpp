@@ -20,12 +20,11 @@ void sendVaultBox(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv, Crypto
                   std::vector<vbSymbol>& symStore) {
     // Option 1 - Uniform random distribution
     srand(seedVal);
-    std::mt19937 mtGenS(seedVal);
+    //std::mt19937 mtGenS(seedVal);
     
     // Option 2 - Robust soliton distribution
     std::vector<double> probabilities = robust_distribution(maxAlerts);
     std::vector<long>   discreteD(maxAlerts, 0);
-    std::vector<int>    random_degrees(symSize, 0);
     
     for(int p_this = 0; p_this < probabilities.size(); p_this++) {
         discreteD[p_this] = lround(1e6 * probabilities[p_this]);
@@ -48,7 +47,8 @@ void sendVaultBox(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv, Crypto
         else if(i > 0) { degree = ranD(e) - 1; }
         else { exit(1); }
         
-        std::shuffle(indices.begin(), indices.end(), mtGenS);
+        //std::shuffle(indices.begin(), indices.end(), mtGenS);
+        std::random_shuffle(indices.begin(), indices.end());
         
         vbSymbol cur_symbol;
         cur_symbol.data= vaultBox[indices[0]];
