@@ -18,19 +18,17 @@ unsigned int shuffleIndexes(std::vector<unsigned long>& indexes) {
 void sendVaultBox(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv, CryptoPP::SecByteBlock akey,
                   std::vector<std::string>& vaultBox, std::vector<unsigned long>& indices,
                   std::vector<vbSymbol>& symStore) {
-    // Option 1 - Uniform random distribution
-    srand(seedVal);
-    //std::mt19937 mtGenS(seedVal);
+    std::mt19937 mtGenS;
     
-    // Option 2 - Robust soliton distribution
+    // Option 1 - True RNG
+    // std::random_device rd;
+    // Option 2 - Robust soliton distribution for degree
     std::vector<double> probabilities = robust_distribution(maxAlerts);
-    std::vector<long>   discreteD(maxAlerts, 0);
+    std::vector<long>   discreteD(probabilities.size(), 0);
     
     for(int p_this = 0; p_this < probabilities.size(); p_this++) {
         discreteD[p_this] = lround(1e6 * probabilities[p_this]);
-        if(logEnable) { std::cout << p_this << "\t" << discreteD[p_this] << "\n"; }
     }
-    if(logEnable) { std::cout << "\n"; }
     
     std::discrete_distribution<long> ranD(discreteD.begin(), discreteD.end());
     std::default_random_engine e;
@@ -38,17 +36,20 @@ void sendVaultBox(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv, Crypto
     
     for(int i = 0; i < symSize; i++) {
         unsigned long degree;
-        
-        // Option 1 - Uniform random distribution
-        //degree = std::rand() % degreeVal;
-        
-        // Option 2 - Robust soliton distribution
         if(i == 0) { degree = 0; }
-        else if(i > 0) { degree = ranD(e) - 1; }
-        else { exit(1); }
+        else if(i > 0) {
+            // Option 1 - Uniform random distribution
+            // degree = rd() % (maxAlerts / 2);
+            // Option 2 - Robust soliton distribution
+            degree = ranD(e) - 1;
+        } else { exit(1); }
         
-        //std::shuffle(indices.begin(), indices.end(), mtGenS);
-        std::random_shuffle(indices.begin(), indices.end());
+        // Option 1 for shuffle - deprecared in C++14
+        // std::random_shuffle(indices.begin(), indices.end());
+        // Option 2 for shuffle
+        // std::shuffle(indices.begin(), indices.end(), mtGenS);
+        // Option 3 for shuffle
+        fisherYatesShuffle(indices);
         
         vbSymbol cur_symbol;
         cur_symbol.data= vaultBox[indices[0]];
@@ -253,7 +254,7 @@ void readVaultBox(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv, Cryp
                 degreeSymbols.erase(degreeSymbols.begin() + k);
                 indexSymbols.erase(indexSymbols.begin() + k);
             } else if(degreeSymbols[k] > 0) {
-                if(haltExit > (symSize * 10)) {
+                if(haltExit > (symSize * 100)) {
                     std::cout << "\nExiting..Not enough symbols to decode successfully!!\n";
                     exit(0);
                 }
@@ -455,6 +456,13 @@ void forwardKeygen(CryptoPP::SecByteBlock genkey, CryptoPP::SecByteBlock& ekey, 
     
     ekey = CryptoPP::SecByteBlock(new_key, 16);
     akey = CryptoPP::SecByteBlock(new_key2,16);
+}
+
+void fisherYatesShuffle(std::vector<unsigned long>& indices) {
+    for (int i = 0; i < indices.size() - 1; i++) {
+        int j = i + std::rand() % (indices.size() - i);
+        std::swap(indices[i], indices[j]);
+    }
 }
 
 std::vector<double> ideal_distribution(int n) {

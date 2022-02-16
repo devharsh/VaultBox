@@ -7,16 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "22C6613A-1A9C-4373-8E99-0A3880E62AC4"
+            uuid = "7CF7EA4E-10D7-4793-AA78-79EFD6B48FD4"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "VaultBox/test.cpp"
+            filePath = "VaultBox/lib.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "140"
-            endingLineNumber = "140"
-            landmarkName = "main()"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "sendVaultBox(ekey, iv, akey, vaultBox, indices, symStore)"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>

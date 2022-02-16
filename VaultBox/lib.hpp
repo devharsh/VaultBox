@@ -32,13 +32,11 @@
 #include <random>
 
 #define redundancyFactor 3
-#define bufferSize 5
+#define bufferSize 100
 #define maxAlerts (redundancyFactor * bufferSize)
-#define degreeVal (maxAlerts / 2)
 #define delimiter '?'
 #define TAG_SIZE 16
 #define symSize (redundancyFactor * maxAlerts)
-#define seedVal 10
 #define logEnable false
 
 struct vbSymbol {
@@ -89,6 +87,8 @@ void decryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv
                          std::vector<std::string>& vaultBox, std::vector<unsigned long>& indexes);
 
 void forwardKeygen(CryptoPP::SecByteBlock genkey, CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& akey);
+
+void fisherYatesShuffle(std::vector<unsigned long>& indices);
 
 std::vector<double> ideal_distribution(int n);
 
