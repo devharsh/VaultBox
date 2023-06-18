@@ -1,9 +1,10 @@
-# VaultBox
+# VaultBox  [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/devharsh/VaultBox/blob/main/LICENSE)  [![Codacy Badge](https://app.codacy.com/project/badge/Grade/e4df8585b6b645e48ea7b845b0c6a511)](https://www.codacy.com/gh/devharsh/VaultBox/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=devharsh/VaultBox&amp;utm_campaign=Badge_Grade)  [![Build status](https://ci.appveyor.com/api/projects/status/hm8rqm9d1ohooeqa?svg=true)](https://ci.appveyor.com/project/devharsh/vaultbox)
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/devharsh/VaultBox/blob/main/LICENSE)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e4df8585b6b645e48ea7b845b0c6a511)](https://www.codacy.com/gh/devharsh/VaultBox/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=devharsh/VaultBox&amp;utm_campaign=Badge_Grade)
-[![Build status](https://ci.appveyor.com/api/projects/status/hm8rqm9d1ohooeqa?svg=true)](https://ci.appveyor.com/project/devharsh/vaultbox)
 
+## Compilation
+    g++ -I/usr/local/include -L/usr/local/lib test.cpp lib.cpp -lcryptopp
+
+## About
 
 $VaultBox$ is a header-only C++ library to provide forward-secure, replicated, randomized, and rate-less, storage and transmission. We propose three levels of security for data protection.
 
