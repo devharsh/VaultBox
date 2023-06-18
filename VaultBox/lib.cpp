@@ -18,10 +18,11 @@ unsigned int shuffleIndexes(std::vector<unsigned long>& indexes) {
 void sendVaultBox(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv, CryptoPP::SecByteBlock akey,
                   std::vector<std::string>& vaultBox, std::vector<unsigned long>& indices,
                   std::vector<vbSymbol>& symStore) {
-    std::mt19937 mtGenS;
+    // std::mt19937 mtGenS;
     
     // Option 1 - True RNG
     // std::random_device rd;
+    
     // Option 2 - Robust soliton distribution for degree
     std::vector<double> probabilities = robust_distribution(maxAlerts);
     std::vector<long>   discreteD(probabilities.size(), 0);
@@ -40,6 +41,7 @@ void sendVaultBox(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv, Crypto
         else if(i > 0) {
             // Option 1 - Uniform random distribution
             // degree = rd() % (maxAlerts / 2);
+            
             // Option 2 - Robust soliton distribution
             degree = ranD(e) - 1;
         } else { exit(1); }

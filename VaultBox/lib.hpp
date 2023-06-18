@@ -32,7 +32,7 @@
 #include <random>
 
 #define redundancyFactor 3
-#define bufferSize 100
+#define bufferSize 5000
 #define maxAlerts (redundancyFactor * bufferSize)
 #define delimiter '?'
 #define TAG_SIZE 16
