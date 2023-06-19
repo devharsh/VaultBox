@@ -197,7 +197,7 @@ std::string encryptChaChaPoly(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBloc
     return cipher + strMac;
 }
 
-std::string encryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, const std::string pt_msg) {
+std::string encryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, std::string const& pt_msg) {
     CryptoPP::GCM<CryptoPP::AES>::Encryption e;
     std::string cipher, encoded, recovered;
     e.SetKeyWithIV(key, key.size(), iv, iv.size());
@@ -375,7 +375,7 @@ void sequenceChecker(std::string recover, std::string& prevAlert, unsigned long&
     prevAlert.assign(recover);
 }
 
-void identityChecker(const std::string nextAlert, std::string prevAlert) {
+void identityChecker(std::string const& nextAlert, std::string prevAlert) {
     if(prevAlert.compare(nextAlert) != 0) { std::cout << "Error: Alert mismatch!!" << "\n"; }
 }
 

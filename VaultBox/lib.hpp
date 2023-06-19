@@ -78,7 +78,7 @@ void PrintKeyAndIV(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv, Cry
 
 void sequenceChecker(std::string recover, std::string& prevAlert, unsigned long& prevSeq);
 
-void identityChecker(std::string nextAlert, std::string prevAlert);
+void identityChecker(std::string const& nextAlert, std::string prevAlert);
 
 void decryptChaChaPoly(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, unsigned long idxCnt,
                        std::vector<std::string>& vaultBox, std::vector<unsigned long>& indexes);
