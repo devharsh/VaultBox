@@ -60,7 +60,7 @@ std::string encryptAlert(CryptoPP::SecByteBlock ekey, CryptoPP::SecByteBlock iv,
 
 std::string encryptChaChaPoly(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, std::string pt_msg);
 
-std::string encryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, std::string pt_msg);
+std::string encryptAES_GCM_AEAD(CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock& iv, std::string const& pt_msg);
 
 void readVaultBox(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv, CryptoPP::SecByteBlock& akey,
                   std::vector<std::string>& vaultBox, std::vector<vbSymbol>& symStore);
