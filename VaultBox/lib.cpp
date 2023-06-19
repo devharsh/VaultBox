@@ -225,7 +225,7 @@ void readVaultBox(CryptoPP::SecByteBlock& ekey, CryptoPP::SecByteBlock& iv, Cryp
                   std::vector<std::string>& vaultBox, std::vector<vbSymbol>& symStore) {
     std::vector<std::string> bufferSymbols;
     std::vector<int> degreeSymbols;
-    std::vector<std::vector<int>> indexSymbols;
+    std::vector< std::vector<int> > indexSymbols;
     std::vector<int> doneSymbols;
     
     for(unsigned long numSym = 0; numSym < symStore.size(); numSym++) {
