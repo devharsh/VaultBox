@@ -375,7 +375,7 @@ void sequenceChecker(std::string recover, std::string& prevAlert, unsigned long&
     prevAlert.assign(recover);
 }
 
-void identityChecker(std::string const& nextAlert, std::string prevAlert) {
+void identityChecker(std::string const& nextAlert, std::string const& prevAlert) {
     if(prevAlert.compare(nextAlert) != 0) { std::cout << "Error: Alert mismatch!!" << "\n"; }
 }
 
