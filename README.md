@@ -1,6 +1,5 @@
 # VaultBox  [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/devharsh/VaultBox/blob/main/LICENSE)  [![Codacy Badge](https://app.codacy.com/project/badge/Grade/e4df8585b6b645e48ea7b845b0c6a511)](https://www.codacy.com/gh/devharsh/VaultBox/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=devharsh/VaultBox&amp;utm_campaign=Badge_Grade)  [![Build status](https://ci.appveyor.com/api/projects/status/hm8rqm9d1ohooeqa?svg=true)](https://ci.appveyor.com/project/devharsh/vaultbox)
 
-
 ## Compilation
     g++ -I/usr/local/include -L/usr/local/lib test.cpp lib.cpp -lcryptopp
 
@@ -14,7 +13,6 @@ $VaultBox$ is a header-only C++ library to provide forward-secure, replicated, r
 
 (iii) To use (optionally) secure chips like Trusted Platform Module (TPM) / Trusted Execution Environment (TEE) and secure memory like Error Correcting Code - Random Access Memory (ECC-RAM) and Persistent Memory (P-Mem) for an extra layer of security. (API support is not implemented in this library.)
 
-
 ## Secure Data Structure
 
 The data structure $\mathcal{DS}$ (secure buffer) is a fixed size structure with size $T = k \cdot n$, which holds $k$ replicas of $n$ messages. The sender sends this data to the receiver every $x$ minutes; if the receiver does not receive it during this interval, it suggests an attack or a crash. Therefore, $\mathcal{DS}$ should be large enough to hold all possible messages during that $x$ minutes interval.
@@ -23,18 +21,15 @@ Replicas of a message inside the $\mathcal{DS}$ are stored at random locations g
 
 To protect the messages in transit, we use the Falcon encoding scheme. Our rate-less scheme assumes a highly adversarial channel $C$ where the attacker can eavesdrop or delete the messages. First, we break the sealed (encrypted) $\mathcal{DS}$ into message blocks and apply LT encoding with a weak PRNG, and then we use the Authenticated Encryption scheme to generate output to transmit. The receiver has to collect enough chunks (or symbols) for regenerating the sealed $\mathcal{DS}$ and unsealing (decrypting) it to read and verify the data inside it. The inner layer for individual messages and the outer layer for the buffer containing all messages provides two layers of encryption protection over plaintext.
 
-
 ## Integrity Checker
 
 After adding each message to $\mathcal{DS}$ for the session, the sender updates and stores the hash value calculated and updated from each message for the session, which the $IntegrityChecker$ periodically compares with the hash value computed from the current contents of the buffer. An alert $\Psi$ is sent if the hash values do not match.
-
 
 ## Encoder \& Decoder
 
 These components convert the secure buffer messages to secure symbols (Falcon codes) and vice-versa. However, they do not modify the existing transmission channel $C$.
 
 ![VaultBoxFountain](images/VaultBoxFountain.png)
-
 
 ## Verifier
 
@@ -47,7 +42,6 @@ Second, $SequenceChecker$ sends alert $\Psi$ for any gaps in the sequence number
 Third, if replication factor $r > 1$, $IdentityChecker$ is used to check if the two messages with the same sequence number are identical; if not, $\Psi$ is sent, indicating a potential compromise.
 
 Finally, since the cryptographic keys are stored for each index between sessions, $Verifier$ also checks (re-verification for previous messages) the buffer contents if it includes any messages from prior sessions and sends $\Psi$ if Authenticated Decryption fails for any of these messages.
-
 
 ## Key Evolution
 
