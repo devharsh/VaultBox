@@ -146,7 +146,8 @@ int main() {
             hash.Update((const CryptoPP::byte*)pass_c.data(), pass_c.size());
             pass_c.resize(hash.DigestSize());
             hash.Final((CryptoPP::byte*)&pass_c[0]);
-            pass_c = pass_c.substr(0, pass_c.length()/2);
+            //pass_c = pass_c.substr(0, pass_c.length()/2);
+	    pass_c.resize(pass_c.length()/2);
             password = pass_c;
         }
         

@@ -32,12 +32,12 @@
 #include <random>
 
 #define redundancyFactor 3
-#define bufferSize 5000
+#define bufferSize 10
 #define maxAlerts (redundancyFactor * bufferSize)
 #define delimiter '?'
 #define TAG_SIZE 16
 #define symSize (redundancyFactor * maxAlerts)
-#define logEnable false
+#define logEnable true
 
 struct vbSymbol {
     std::vector<int> indices;
